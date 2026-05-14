@@ -1,0 +1,27 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------< com.realestate:admin-management >-------------------
+[INFO] Building Real Estate Admin Management 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ war ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ admin-management ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ admin-management ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- exec:3.1.0:java (default-cli) @ admin-management ---
+--- MS SQL Server Connection Diagnostic ---
+1. Attempting to get connection...
+CONNECTION SUCCESSFUL!
+2. Checking database tables...
+'users' table exists. Count: 4
+'admins' table exists. Count: 2
+'superadmin' user exists: Super Administrator
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.060 s
+[INFO] Finished at: 2026-04-04T09:34:51+05:30
+[INFO] ------------------------------------------------------------------------
