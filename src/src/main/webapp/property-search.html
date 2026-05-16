@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Search Properties</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1>Search Properties</h1>
+
+    <form action="/properties/search" method="get" class="mb-4">
+        <div class="mb-3">
+            <label class="form-label">Search by ID, Location, or Type</label>
+            <input type="text"
+                   name="keyword"
+                   class="form-control"
+                   placeholder="Example: P001, Colombo, House, Land, Apartment">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Search</button>
+        <a href="/properties" class="btn btn-secondary">Back</a>
+    </form>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Title</th>
+            <th>Location</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Detail 1</th>
+            <th>Detail 2</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="property : ${properties}">
+            <td th:text="${property.propertyId}"></td>
+            <td th:text="${property.propertyType}"></td>
+            <td th:text="${property.title}"></td>
+            <td th:text="${property.location}"></td>
+            <td th:text="${property.price}"></td>
+            <td th:text="${property.description}"></td>
+
+            <!-- Show bedrooms only if property type is House and show other depend on type -->
+            <td>
+                <span th:if="${property.propertyType == 'House'}"
+                      th:text="'Bedrooms: ' + ${property.bedrooms}">
+                </span>
+
+                <span th:if="${property.propertyType == 'Apartment'}"
+                      th:text="'Floor: ' + ${property.floorNumber}">
+                </span>
+
+                <span th:if="${property.propertyType == 'Land'}"
+                      th:text="'Land Size: ' + ${property.landSize}">
+                </span>
+            </td>
+
+            <td>
+                <span th:if="${property.propertyType == 'House'}"
+                      th:text="'Bathrooms: ' + ${property.bathrooms}">
+                </span>
+
+                <span th:if="${property.propertyType == 'Apartment'}"
+                      th:text="'Unit: ' + ${property.unitNumber}">
+                </span>
+
+                <span th:if="${property.propertyType == 'Land'}"
+                      th:text="'Land Type: ' + ${property.landType}">
+                </span>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
