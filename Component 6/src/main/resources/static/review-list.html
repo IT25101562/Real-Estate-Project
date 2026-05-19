@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Reviews - 124 Oceanview Drive</title>
+    <!-- Google Fonts for Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="list-styles.css">
+</head>
+<body>
+    <div class="background-effects">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+    </div>
+    
+    <main class="page-container">
+        <!-- Header / Stats Section -->
+        <section class="summary-header">
+            <div class="property-summary">
+                <img src="property.png" alt="124 Oceanview Drive" class="property-thumb">
+                <div class="property-info-header">
+                    <span class="badge">Active Listing</span>
+                    <h1>124 Oceanview Drive</h1>
+                    <p class="location"><i class="fa-solid fa-location-dot"></i> Malibu, CA 90265</p>
+                </div>
+            </div>
+            
+            <div class="rating-overview">
+                <div class="average-score">4.8</div>
+                <div class="rating-details">
+                    <div class="stars" aria-label="4.8 out of 5 stars">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star-half-stroke"></i>
+                    </div>
+                    <span class="review-count">Based on 12 reviews</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filters Bar -->
+        <div class="filters-bar">
+            <h3>Recent Reviews</h3>
+            <div class="filter-options">
+                <button class="filter-btn active">All</button>
+                <button class="filter-btn">Verified Only</button>
+                <select class="sort-select">
+                    <option>Most Recent</option>
+                    <option>Highest Rated</option>
+                    <option>Lowest Rated</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Review List Container -->
+        <section class="reviews-grid" id="reviews-container">
+            <!-- Reviews will be loaded dynamically via list-script.js -->
+        </section>
+    </main>
+
+    <script src="list-script.js"></script>
+</body>
+</html>

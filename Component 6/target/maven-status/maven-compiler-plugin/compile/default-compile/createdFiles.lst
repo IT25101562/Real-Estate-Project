@@ -1,0 +1,4 @@
+com\luxeestates\LuxeEstatesApplication.class
+com\luxeestates\controller\ReviewController.class
+com\luxeestates\repository\ReviewRepository.class
+com\luxeestates\model\Review.class

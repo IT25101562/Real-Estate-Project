@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Review - 124 Oceanview Drive</title>
+    <!-- Google Fonts for Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="background-effects">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+    </div>
+    
+    <main class="review-container">
+        <!-- Property Info Section -->
+        <section class="property-info">
+            <div class="property-image">
+                <img src="property.png" alt="Luxury property at 124 Oceanview Drive">
+                <div class="image-overlay"></div>
+            </div>
+            <div class="property-details">
+                <span class="badge">Active Listing</span>
+                <h1>124 Oceanview Drive</h1>
+                <p class="location"><i class="fa-solid fa-location-dot"></i> Malibu, CA 90265</p>
+                
+                <div class="property-stats">
+                    <div class="stat">
+                        <i class="fa-solid fa-bed"></i> <span>5 Beds</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fa-solid fa-bath"></i> <span>6 Baths</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fa-solid fa-ruler-combined"></i> <span>7,200 sqft</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Review Form Section -->
+        <section class="review-form-section">
+            <form id="review-form" class="review-form">
+                <h2>Rate your experience</h2>
+                <p class="subtitle">Your feedback helps others make better real estate decisions.</p>
+
+                <!-- Star Rating -->
+                <div class="rating-group">
+                    <label>Overall Rating <span class="required">*</span></label>
+                    <div class="stars" id="star-rating">
+                        <input type="radio" name="rating" id="star5" value="5">
+                        <label for="star5" class="fa-solid fa-star"></label>
+                        <input type="radio" name="rating" id="star4" value="4">
+                        <label for="star4" class="fa-solid fa-star"></label>
+                        <input type="radio" name="rating" id="star3" value="3">
+                        <label for="star3" class="fa-solid fa-star"></label>
+                        <input type="radio" name="rating" id="star2" value="2">
+                        <label for="star2" class="fa-solid fa-star"></label>
+                        <input type="radio" name="rating" id="star1" value="1">
+                        <label for="star1" class="fa-solid fa-star"></label>
+                    </div>
+                    <p class="rating-error" id="rating-error">Please select a rating.</p>
+                </div>
+
+                <!-- Title Input -->
+                <div class="input-group">
+                    <input type="text" id="review-title" required placeholder=" ">
+                    <label for="review-title">Review Title</label>
+                </div>
+
+                <!-- Text Area -->
+                <div class="input-group">
+                    <textarea id="review-content" rows="4" required placeholder=" "></textarea>
+                    <label for="review-content">Write your review</label>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="submit-btn" id="submit-btn">
+                    <span>Submit Review</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+            
+            <div class="success-message" id="success-message">
+                <div class="success-icon">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <h3>Check your inbox!</h3>
+                <p>Your review has been verified and submitted successfully.</p>
+                <button type="button" class="btn-outline" id="reset-btn">Write another review</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
