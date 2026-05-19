@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile – EstateHub</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo">🏠 EstateHub</div>
+      <ul class="nav-links">
+        <li><a href="users.html">Users</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><button id="logout-btn" class="btn btn-outline" style="padding:0.4rem 1rem;font-size:0.85rem;">Logout</button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main style="padding:2.5rem 1rem 4rem;">
+    <div class="container">
+
+      <!-- Profile Hero Banner -->
+      <div class="profile-banner" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;">
+        <div style="display:flex;align-items:center;gap:1.25rem;">
+          <div class="avatar-circle" id="avatar-initials">?</div>
+          <div>
+            <p style="color:rgba(255,255,255,0.6);font-size:0.8rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.2rem;">Welcome back</p>
+            <h1 id="welcome-name" style="font-size:1.75rem;color:#fff;margin:0;">Loading…</h1>
+            <p style="color:rgba(255,255,255,0.55);font-size:0.85rem;margin-top:0.25rem;" id="user-email-badge">—</p>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <p style="color:rgba(255,255,255,0.5);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Member since</p>
+          <p id="member-since" style="color:#fff;font-weight:700;font-size:1.1rem;">—</p>
+          <span class="badge badge-success" style="margin-top:0.4rem;" id="status-badge">● Active</span>
+        </div>
+      </div>
+
+      <!-- Grid -->
+      <div style="display:grid;grid-template-columns:1fr 320px;gap:1.75rem;align-items:start;">
+
+        <!-- LEFT: Profile Info -->
+        <div>
+          <div class="card" style="margin-bottom:1.75rem;">
+            <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <h3 style="margin:0;">Profile Information</h3>
+                <p style="margin:0.2rem 0 0;">Your personal details</p>
+              </div>
+              <button id="edit-profile-btn" class="btn btn-secondary" style="font-size:0.82rem;padding:0.5rem 1rem;">✏️ Edit</button>
+            </div>
+            <div id="profile-info">
+              <div class="spinner"></div>
+            </div>
+          </div>
+
+          <!-- Edit Profile Form (hidden by default) -->
+          <div id="edit-profile-section" class="hidden">
+            <div class="card">
+              <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
+                <div>
+                  <h3 style="margin:0;">Edit Profile</h3>
+                  <p style="margin:0.2rem 0 0;">Update your information</p>
+                </div>
+                <button id="cancel-edit-btn" class="btn btn-outline" style="font-size:0.82rem;padding:0.5rem 0.9rem;">✕ Cancel</button>
+              </div>
+              <form id="edit-profile-form">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                  <div class="form-group">
+                    <label for="edit-firstName">First Name</label>
+                    <input type="text" id="edit-firstName" name="firstName" required>
+                    <span class="error-message"></span>
+                  </div>
+                  <div class="form-group">
+                    <label for="edit-lastName">Last Name</label>
+                    <input type="text" id="edit-lastName" name="lastName" required>
+                    <span class="error-message"></span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="edit-phoneNumber">Phone Number</label>
+                  <input type="tel" id="edit-phoneNumber" name="phoneNumber" placeholder="Optional">
+                  <span class="error-message"></span>
+                </div>
+                <div class="form-group">
+                  <label for="edit-address">Street Address</label>
+                  <input type="text" id="edit-address" name="address" placeholder="Optional">
+                  <span class="error-message"></span>
+                </div>
+                <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:1rem;">
+                  <div class="form-group">
+                    <label for="edit-city">City</label>
+                    <input type="text" id="edit-city" name="city">
+                    <span class="error-message"></span>
+                  </div>
+                  <div class="form-group">
+                    <label for="edit-state">State</label>
+                    <input type="text" id="edit-state" name="state">
+                    <span class="error-message"></span>
+                  </div>
+                  <div class="form-group">
+                    <label for="edit-zipCode">ZIP</label>
+                    <input type="text" id="edit-zipCode" name="zipCode">
+                    <span class="error-message"></span>
+                  </div>
+                </div>
+                <div style="display:flex;gap:0.75rem;margin-top:0.5rem;">
+                  <button type="submit" class="btn btn-primary" style="flex:1;">💾 Save Changes</button>
+                  <button type="button" id="cancel-edit-btn-2" class="btn btn-outline" style="flex:1;">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Change Password (hidden by default) -->
+          <div id="change-password-section" class="hidden">
+            <div class="card">
+              <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
+                <div>
+                  <h3 style="margin:0;">Change Password</h3>
+                  <p style="margin:0.2rem 0 0;">Keep your account secure</p>
+                </div>
+                <button id="cancel-password-btn" class="btn btn-outline" style="font-size:0.82rem;padding:0.5rem 0.9rem;">✕ Cancel</button>
+              </div>
+              <form id="change-password-form">
+                <div class="form-group">
+                  <label for="current-password">Current Password</label>
+                  <input type="password" id="current-password" name="currentPassword" placeholder="Enter current password" required>
+                  <span class="error-message"></span>
+                </div>
+                <div class="form-group">
+                  <label for="new-password">New Password</label>
+                  <input type="password" id="new-password" name="newPassword" placeholder="Min. 6 characters" required>
+                  <span class="error-message"></span>
+                </div>
+                <div class="form-group">
+                  <label for="confirm-new-password">Confirm New Password</label>
+                  <input type="password" id="confirm-new-password" name="confirmNewPassword" placeholder="Re-enter new password" required>
+                  <span class="error-message"></span>
+                </div>
+                <div style="display:flex;gap:0.75rem;">
+                  <button type="submit" class="btn btn-primary" style="flex:1;">🔄 Update Password</button>
+                  <button type="button" id="cancel-password-btn-2" class="btn btn-outline" style="flex:1;">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Quick Actions -->
+        <div>
+          <div class="card">
+            <div class="card-header">
+              <h3 style="margin:0;">Quick Actions</h3>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:0.75rem;">
+              <button id="edit-profile-btn-2" class="btn btn-secondary btn-block" style="justify-content:flex-start;gap:0.75rem;">
+                <span style="font-size:1.1rem;">✏️</span> Edit Profile
+              </button>
+              <button id="change-password-btn" class="btn btn-secondary btn-block" style="justify-content:flex-start;gap:0.75rem;">
+                <span style="font-size:1.1rem;">🔐</span> Change Password
+              </button>
+              <button id="view-listings-btn" class="btn btn-secondary btn-block" style="justify-content:flex-start;gap:0.75rem;">
+                <span style="font-size:1.1rem;">🏘️</span> My Listings
+              </button>
+              <div style="height:1px;background:var(--glass-border);margin:0.25rem 0;"></div>
+              <button id="logout-btn-2" class="btn btn-outline btn-block" style="justify-content:flex-start;gap:0.75rem;color:var(--error);border-color:rgba(244,63,94,0.3);">
+                <span style="font-size:1.1rem;">🚪</span> Sign Out
+              </button>
+            </div>
+          </div>
+
+          <!-- Stats Card -->
+          <div class="card" style="margin-top:1.25rem;">
+            <div class="card-header">
+              <h3 style="margin:0;">Account Stats</h3>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+              <div class="stat-card">
+                <div class="stat-number">0</div>
+                <div class="stat-label">Listings</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number">0</div>
+                <div class="stat-label">Inquiries</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer><p>© 2026 EstateHub. All rights reserved.</p></footer>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/validation.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script>
+    let currentUser = null;
+
+    document.addEventListener('DOMContentLoaded', async function() {
+      requireLogin();
+      let userId = getQueryParam('userId');
+      if (!userId) { const u = getUserSession(); userId = u.id; }
+      await loadUserProfile(userId);
+      setupEventListeners();
+    });
+
+    async function loadUserProfile(userId) {
+      try {
+        const response = await getUserProfile(userId);
+        currentUser = response.data;
+        displayProfileInfo(currentUser);
+        updateBanner(currentUser);
+      } catch (error) {
+        showAlert('Failed to load profile. Please try again.', 'error');
+      }
+    }
+
+    function displayProfileInfo(user) {
+      const rows = [
+        { label: '📧 Email',       value: user.email },
+        { label: '👤 Full Name',   value: `${user.firstName} ${user.lastName}` },
+        { label: '📞 Phone',       value: user.phoneNumber || '—' },
+        { label: '🏠 Address',     value: user.address || '—' },
+        { label: '🌆 City',        value: user.city ? `${user.city}, ${user.state || ''} ${user.zipCode || ''}`.trim() : '—' },
+        { label: '📅 Joined',      value: formatDateShort(user.createdAt) }
+      ];
+      document.getElementById('profile-info').innerHTML =
+        rows.map(r => `
+          <div class="info-row">
+            <span class="info-label">${r.label}</span>
+            <span class="info-value">${r.value}</span>
+          </div>`).join('');
+    }
+
+    function updateBanner(user) {
+      const initials = (user.firstName[0] + user.lastName[0]).toUpperCase();
+      document.getElementById('avatar-initials').textContent = initials;
+      document.getElementById('welcome-name').textContent = `${user.firstName} ${user.lastName}`;
+      document.getElementById('user-email-badge').textContent = user.email;
+      document.getElementById('member-since').textContent = formatDateShort(user.createdAt);
+    }
+
+    function setupEventListeners() {
+      const showEdit = () => { document.getElementById('edit-profile-section').classList.remove('hidden'); populateEditForm(); };
+      const hideEdit = () => document.getElementById('edit-profile-section').classList.add('hidden');
+      const showPwd  = () => document.getElementById('change-password-section').classList.remove('hidden');
+      const hidePwd  = () => document.getElementById('change-password-section').classList.add('hidden');
+
+      document.getElementById('edit-profile-btn').addEventListener('click', showEdit);
+      document.getElementById('edit-profile-btn-2').addEventListener('click', showEdit);
+      document.getElementById('cancel-edit-btn').addEventListener('click', hideEdit);
+      document.getElementById('cancel-edit-btn-2').addEventListener('click', hideEdit);
+      document.getElementById('change-password-btn').addEventListener('click', showPwd);
+      document.getElementById('cancel-password-btn').addEventListener('click', hidePwd);
+      document.getElementById('cancel-password-btn-2').addEventListener('click', hidePwd);
+      document.getElementById('view-listings-btn').addEventListener('click', () => showAlert('Listings feature coming soon!', 'info'));
+      document.getElementById('edit-profile-form').addEventListener('submit', async e => { e.preventDefault(); await saveProfileChanges(); });
+      document.getElementById('change-password-form').addEventListener('submit', async e => { e.preventDefault(); await savePasswordChanges(); });
+
+      const logoutFn = (e) => { e.preventDefault(); logoutUser(); window.location.href = 'login.html'; };
+      document.getElementById('logout-btn').addEventListener('click', logoutFn);
+      document.getElementById('logout-btn-2').addEventListener('click', logoutFn);
+    }
+
+    function populateEditForm() {
+      document.getElementById('edit-firstName').value   = currentUser.firstName;
+      document.getElementById('edit-lastName').value    = currentUser.lastName;
+      document.getElementById('edit-phoneNumber').value = currentUser.phoneNumber || '';
+      document.getElementById('edit-address').value     = currentUser.address || '';
+      document.getElementById('edit-city').value        = currentUser.city || '';
+      document.getElementById('edit-state').value       = currentUser.state || '';
+      document.getElementById('edit-zipCode').value     = currentUser.zipCode || '';
+    }
+
+    async function saveProfileChanges() {
+      const form = document.getElementById('edit-profile-form');
+      const updateData = {
+        firstName:   document.getElementById('edit-firstName').value.trim(),
+        lastName:    document.getElementById('edit-lastName').value.trim(),
+        phoneNumber: document.getElementById('edit-phoneNumber').value.trim() || null,
+        address:     document.getElementById('edit-address').value.trim() || null,
+        city:        document.getElementById('edit-city').value.trim() || null,
+        state:       document.getElementById('edit-state').value.trim() || null,
+        zipCode:     document.getElementById('edit-zipCode').value.trim() || null
+      };
+      try {
+        disableForm(form);
+        showAlert('Saving changes...', 'info', 0);
+        const response = await updateUserProfile(currentUser.id, updateData);
+        currentUser = response.data;
+        displayProfileInfo(currentUser);
+        updateBanner(currentUser);
+        document.getElementById('edit-profile-section').classList.add('hidden');
+        showAlert('Profile updated successfully!', 'success');
+      } catch (error) {
+        showAlert(error.message || 'Failed to save profile.', 'error');
+      } finally { enableForm(form); }
+    }
+
+    async function savePasswordChanges() {
+      const form = document.getElementById('change-password-form');
+      const newPassword     = document.getElementById('new-password').value;
+      const confirmPassword = document.getElementById('confirm-new-password').value;
+      if (newPassword !== confirmPassword) { showAlert('Passwords do not match', 'error'); return; }
+      if (newPassword.length < 6) { showAlert('Password must be at least 6 characters', 'error'); return; }
+      try {
+        disableForm(form);
+        showAlert('Updating password...', 'info', 0);
+        await resetPassword(currentUser.id, newPassword);
+        clearForm(form);
+        document.getElementById('change-password-section').classList.add('hidden');
+        showAlert('Password changed successfully!', 'success');
+      } catch (error) {
+        showAlert(error.message || 'Failed to change password.', 'error');
+      } finally { enableForm(form); }
+    }
+  </script>
+</body>
+</html>

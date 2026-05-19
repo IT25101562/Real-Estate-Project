@@ -1,0 +1,15 @@
+/Users/rasakumarthinesh/Desktop/Real Estate/backend/src/main/java/com/realestate/dto/UserResponseDto.java
+/Users/rasakumarthinesh/Desktop/Real Estate/backend/src/main/java/com/realestate/service/UserService.java
+/Users/rasakumarthinesh/Desktop/Real Estate/backend/src/main/java/com/realestate/dto/UserLoginDto.java
+/Users/rasakumarthinesh/Desktop/Real Estate/backend/src/main/java/com/realestate/exception/UserAlreadyExistsException.java
+/Users/rasakumarthinesh/Desktop/Real Estate/backend/src/main/java/com/realestate/repository/UserRepository.java
+/Users/rasakumarthinesh/Desktop/Real Estate/backend/src/main/java/com/realestate/controller/AuthController.java
+/Users/rasakumarthinesh/Desktop/Real Estate/backend/src/main/java/com/realestate/dto/UserUpdateDto.java
+/Users/rasakumarthinesh/Desktop/Real Estate/backend/src/main/java/com/realestate/dto/ForgotPasswordDto.java
+/Users/rasakumarthinesh/Desktop/Real Estate/backend/src/main/java/com/realestate/RealEstateApplication.java
+/Users/rasakumarthinesh/Desktop/Real Estate/backend/src/main/java/com/realestate/entity/User.java
+/Users/rasakumarthinesh/Desktop/Real Estate/backend/src/main/java/com/realestate/config/CorsConfig.java
+/Users/rasakumarthinesh/Desktop/Real Estate/backend/src/main/java/com/realestate/exception/UserNotFoundException.java
+/Users/rasakumarthinesh/Desktop/Real Estate/backend/src/main/java/com/realestate/dto/UserRegistrationDto.java
+/Users/rasakumarthinesh/Desktop/Real Estate/backend/src/main/java/com/realestate/controller/UserController.java
+/Users/rasakumarthinesh/Desktop/Real Estate/backend/src/main/java/com/realestate/exception/GlobalExceptionHandler.java

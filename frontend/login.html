@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login – RealEstate Portal</title>
+  <meta name="description" content="Sign in to your Real Estate Portal account.">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo">🏠 EstateHub</div>
+      <ul class="nav-links">
+        <li><a href="login.html">Login</a></li>
+        <li><a href="register.html">Register</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="center-content">
+    <div class="auth-container">
+      <!-- Brand Mark -->
+      <div class="text-center mb-3" style="margin-bottom:2rem;">
+        <div style="width:56px;height:56px;margin:0 auto 1rem;border-radius:16px;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:1.6rem;box-shadow:0 8px 24px rgba(99,102,241,0.4);">🏠</div>
+        <h1 style="font-size:1.75rem;margin-bottom:0.25rem;">Welcome back</h1>
+        <p style="color:var(--text-muted);font-size:0.92rem;">Sign in to your account to continue</p>
+      </div>
+
+      <div class="card" style="padding:2.25rem;">
+        <form id="login-form" autocomplete="on">
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email">
+            <span class="error-message"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
+            <span class="error-message"></span>
+          </div>
+
+          <div class="flex-between" style="margin-bottom:1.5rem;flex-wrap:wrap;gap:0.5rem;">
+            <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-size:0.88rem;color:var(--text-muted);">
+              <input type="checkbox" id="remember-me" name="rememberMe" style="width:auto;accent-color:var(--primary);">
+              Remember me
+            </label>
+            <a href="forgot-password.html" style="font-size:0.88rem;font-weight:600;">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-large" id="login-submit">
+            Sign In →
+          </button>
+        </form>
+
+        <div class="divider">or</div>
+
+        <div class="text-center" style="font-size:0.88rem;color:var(--text-muted);">
+          Don't have an account?
+          <a href="register.html" style="font-weight:600;margin-left:0.25rem;">Create one free</a>
+        </div>
+      </div>
+
+      <!-- Demo Creds -->
+      <div style="margin-top:1.25rem;padding:0.9rem 1.25rem;border-radius:var(--radius);background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);font-size:0.82rem;color:var(--text-muted);">
+        <strong style="color:var(--primary);">Demo credentials</strong><br>
+        Email: <code style="color:var(--text);">john@example.com</code> &nbsp;|&nbsp; Password: <code style="color:var(--text);">password123</code>
+      </div>
+    </div>
+  </main>
+
+  <footer><p>© 2026 EstateHub. All rights reserved.</p></footer>
+
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/validation.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      redirectIfLoggedIn();
+      const form = document.getElementById('login-form');
+      const validationRules = {
+        email:    { required: true, email: true, name: 'Email' },
+        password: { required: true, name: 'Password' }
+      };
+      setupFormValidation(form, validationRules);
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!validateForm(form, validationRules)) { showAlert('Please fix the errors', 'error'); return; }
+        const email    = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+        try {
+          disableForm(form);
+          showAlert('Signing in...', 'info', 0);
+          const response = await loginUser(email, password);
+          storeUserSession(response.data);
+          showAlert('Login successful! Redirecting…', 'success', 1500);
+          setTimeout(() => { window.location.href = `profile.html?userId=${response.data.id}`; }, 1500);
+        } catch (error) {
+          enableForm(form);
+          showAlert(error.message || 'Login failed. Please try again.', 'error');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
