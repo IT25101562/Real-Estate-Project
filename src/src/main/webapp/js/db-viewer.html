@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResellLK | Database Explorer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #050505;
+            --surface-color: rgba(25, 25, 25, 0.65);
+            --gold: #D4AF37;
+            --gold-hover: #F3E5AB;
+            --text-main: #FFFFFF;
+            --text-muted: #A0A0A0;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Abstract luxury background */
+        .bg-layer {
+            position: fixed;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.05) 0%, transparent 60%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 40%);
+            z-index: 0;
+            pointer-events: none;
+            animation: slowSpin 60s linear infinite;
+        }
+
+        @keyframes slowSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #common-navbar {
+            position: relative;
+            z-index: 10;
+        }
+
+        .page-wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        /* Login Portal Styles */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 200px);
+            padding: 2rem;
+        }
+
+        .login-card {
+            background: var(--surface-color);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--border-color);
+            border-radius: 1.5rem;
+            padding: 4rem 3.5rem;
+            width: 100%;
+            max-width: 460px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+            text-align: center;
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .login-header i {
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.2));
+        }
+
+        .login-header h2 {
+            font-size: 2.2rem;
+            font-weight: 300;
+            margin: 0 0 0.5rem 0;
+            letter-spacing: -1px;
+        }
+
+        .login-header h2 span {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .login-header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 300;
+            margin-bottom: 3rem;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .form-group i {
+            position: absolute;
+            left: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            transition: var(--transition);
+        }
+
+        .form-input {
+            width: 100%;
+            box-sizing: border-box;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 0.85rem;
+            padding: 1.2rem 1.2rem 1.2rem 3.2rem;
+            color: white;
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .form-input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+        }
+
+        .form-input:focus + i {
+            color: var(--gold);
+        }
+
+        .btn-auth {
+            background: var(--gold);
+            color: #000;
+            border: none;
+            border-radius: 0.85rem;
+            padding: 1.2rem;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 1rem;
+            width: 100%;
+            cursor: pointer;
+            transition: var(--transition);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.15);
+        }
+
+        .btn-auth:hover {
+            background: var(--gold-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px rgba(212, 175, 55, 0.25);
+        }
+
+        .error-message {
+            color: #F87171;
+            font-size: 0.9rem;
+            margin-top: 1.5rem;
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Database Explorer Layout */
+        .explorer-layout {
+            display: flex;
+            gap: 3rem;
+            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .sidebar {
+            width: 280px;
+            flex-shrink: 0;
+        }
+
+        .glass-sidebar {
+            background: var(--surface-color);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 1.25rem;
+            padding: 2rem;
+        }
+
+        .sidebar-title {
+            font-size: 1.2rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+            margin-bottom: 2rem;
+            color: var(--gold);
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .table-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .table-btn {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            font-family: inherit;
+            font-weight: 500;
+            text-align: left;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            border-color: rgba(212,175,55,0.3);
+        }
+
+        .table-btn.active {
+            background: var(--gold);
+            color: #000;
+            border-color: var(--gold);
+            font-weight: 600;
+        }
+
+        .content-area {
+            flex-grow: 1;
+            min-width: 0;
+        }
+
+        .glass-panel {
+            background: var(--surface-color);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 1.25rem;
+            padding: 3rem;
+            min-height: 500px;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .panel-title {
+            font-size: 2.2rem;
+            font-weight: 300;
+            margin: 0;
+            letter-spacing: -1px;
+        }
+
+        .panel-title span { color: var(--gold); }
+
+        .btn-logout {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.75rem;
+            font-family: inherit;
+            font-weight: 500;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-logout:hover {
+            border-color: #F87171;
+            color: #F87171;
+            background: rgba(248, 113, 113, 0.05);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 0.75rem;
+            border: 1px solid var(--border-color);
+            background: rgba(0,0,0,0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(255,255,255,0.05);
+            padding: 1.2rem 1.5rem;
+            font-weight: 600;
+            color: white;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-color);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+
+        td {
+            padding: 1.2rem 1.5rem;
+            color: var(--text-muted);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            white-space: nowrap;
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        tr:hover td {
+            color: white;
+            background: rgba(255,255,255,0.02);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 5rem 2rem;
+            color: var(--text-muted);
+        }
+
+        .no-data i {
+            font-size: 3rem;
+            color: rgba(255,255,255,0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .explorer-layout { flex-direction: column; }
+            .sidebar { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-layer"></div>
+    <div id="common-navbar"></div>
+
+    <div class="page-wrapper">
+        <!-- 1. Login Portal -->
+        <div id="loginPortal" class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <i class="fas fa-shield-halved"></i>
+                    <h2>Admin <span>Access</span></h2>
+                    <p>Enter your credentials to reveal the system database explorer</p>
+                </div>
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <input type="text" id="email" class="form-input" placeholder="Admin Username / Email" required autocomplete="username">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="password" class="form-input" placeholder="Security Password" required autocomplete="current-password">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <button type="submit" class="btn-auth" id="loginBtn">Authenticate</button>
+                    <div class="error-message" id="errorMessage">Invalid administrator credentials.</div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 2. Database Explorer Interface -->
+        <div id="explorerPortal" class="explorer-layout" style="display: none;">
+            <div class="sidebar">
+                <div class="glass-sidebar">
+                    <div class="sidebar-title">Database Tables</div>
+                    <div class="table-list" id="tableList">
+                        <!-- Loaded dynamically -->
+                        <div style="text-align:center; padding:2rem;">
+                            <i class="fas fa-circle-notch fa-spin" style="color:var(--gold);"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-area">
+                <div class="glass-panel">
+                    <div class="panel-header">
+                        <div>
+                            <h2 class="panel-title" id="activeTableName">Select a <span>Table</span></h2>
+                        </div>
+                        <button class="btn-logout" onclick="handleLogout()">
+                            <i class="fas fa-right-from-bracket"></i> Logout
+                        </button>
+                    </div>
+
+                    <div id="tableContent">
+                        <div class="no-data">
+                            <i class="fas fa-database"></i>
+                            <h3>No Table Selected</h3>
+                            <p>Click on any table in the sidebar to browse its raw saved records.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check session storage on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = sessionStorage.getItem('adminToken');
+            if (token) {
+                showExplorer();
+            }
+        });
+
+        function showExplorer() {
+            document.getElementById('loginPortal').style.display = 'none';
+            document.getElementById('explorerPortal').style.display = 'flex';
+            loadTables();
+        }
+
+        function showLogin() {
+            document.getElementById('loginPortal').style.display = 'flex';
+            document.getElementById('explorerPortal').style.display = 'none';
+            sessionStorage.removeItem('adminToken');
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMessage');
+            const loginBtn = document.getElementById('loginBtn');
+            
+            errorMsg.style.display = 'none';
+            loginBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Authenticating...';
+
+            try {
+                const res = await fetch('/api/db/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    sessionStorage.setItem('adminToken', data.token);
+                    showExplorer();
+                } else {
+                    errorMsg.style.display = 'block';
+                }
+            } catch (err) {
+                console.error(err);
+                errorMsg.style.display = 'block';
+                errorMsg.innerText = 'Server error. Please try again.';
+            } finally {
+                loginBtn.innerHTML = 'Authenticate';
+            }
+        }
+
+        async function handleLogout() {
+            const token = sessionStorage.getItem('adminToken');
+            try {
+                await fetch('/api/db/logout', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+            } catch (e) {
+                console.error(e);
+            }
+            showLogin();
+        }
+
+        async function loadTables() {
+            const token = sessionStorage.getItem('adminToken');
+            try {
+                const res = await fetch('/api/db/tables', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (res.status === 401) {
+                    showLogin();
+                    return;
+                }
+
+                if (res.ok) {
+                    const data = await res.json();
+                    const list = document.getElementById('tableList');
+                    list.innerHTML = '';
+                    
+                    const whitelist = ["USERS", "PROPERTY", "INQUIRIES", "APARTMENT", "VILLA", "COMMERCIAL", "LAND", "BOOKING"];
+                    const filtered = data
+                        .map(t => t.TABLE_NAME)
+                        .filter(name => whitelist.includes(name.toUpperCase()))
+                        .sort();
+
+                    if (filtered.length === 0) {
+                        list.innerHTML = `<div style="color:var(--text-muted); text-align:center;">No active tables.</div>`;
+                        return;
+                    }
+
+                    filtered.forEach(name => {
+                        const btn = document.createElement('button');
+                        btn.className = 'table-btn';
+                        btn.innerHTML = `<span><i class="fas fa-table" style="margin-right:10px; color:var(--gold);"></i> ${name}</span> <i class="fas fa-chevron-right" style="font-size:0.8rem;"></i>`;
+                        btn.onclick = () => loadTableData(name, btn);
+                        list.appendChild(btn);
+                    });
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function loadTableData(tableName, btn) {
+            document.querySelectorAll('.table-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('activeTableName').innerHTML = `Table: <span>${tableName}</span>`;
+
+            const container = document.getElementById('tableContent');
+            container.innerHTML = `
+                <div style="text-align:center; padding:5rem;">
+                    <i class="fas fa-circle-notch fa-spin fa-2x" style="color:var(--gold);"></i>
+                </div>`;
+
+            const token = sessionStorage.getItem('adminToken');
+            try {
+                const res = await fetch(`/api/db/query?table=${tableName}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (res.status === 401) {
+                    showLogin();
+                    return;
+                }
+
+                if (res.ok) {
+                    const rows = await res.json();
+                    if (rows.length === 0) {
+                        container.innerHTML = `
+                            <div class="no-data">
+                                <i class="fas fa-folder-open"></i>
+                                <h3>Table is Empty</h3>
+                                <p>There are currently no rows stored in the "${tableName}" table.</p>
+                            </div>`;
+                        return;
+                    }
+
+                    const columns = Object.keys(rows[0]);
+                    let headerHTML = '<tr>';
+                    columns.forEach(col => {
+                        headerHTML += `<th>${col}</th>`;
+                    });
+                    headerHTML += '</tr>';
+
+                    let rowsHTML = '';
+                    rows.forEach(row => {
+                        rowsHTML += '<tr>';
+                        columns.forEach(col => {
+                            const val = row[col];
+                            const displayVal = val === null ? '<em style="color:rgba(255,255,255,0.15)">NULL</em>' : val;
+                            rowsHTML += `<td>${displayVal}</td>`;
+                        });
+                        rowsHTML += '</tr>';
+                    });
+
+                    container.innerHTML = `
+                        <div class="table-container animate-fade-in">
+                            <table>
+                                <thead>${headerHTML}</thead>
+                                <tbody>${rowsHTML}</tbody>
+                            </table>
+                        </div>`;
+                }
+            } catch (e) {
+                container.innerHTML = `<div style="color:#F87171; padding:2rem;">Error: ${e.message}</div>`;
+            }
+        }
+
+        // Load common navbar
+        fetch('/navbar.html')
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('common-navbar').innerHTML = html;
+            });
+    </script>
+</body>
+</html>

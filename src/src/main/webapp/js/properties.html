@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResellLK | Luxury Real Estate</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<style>
+    /* Depth Parallax Hero */
+    .hero-depth {
+        position: relative;
+        height: 60vh;
+        min-height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background-image: url('/img/depth_hero.png');
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        margin-top: 80px; /* offset navbar */
+        margin-bottom: 3rem;
+        box-shadow: inset 0 -20px 40px -10px rgba(249,250,251,1); /* blend with bg */
+    }
+    .hero-overlay {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(17, 24, 39, 0.4);
+    }
+    .hero-content {
+        position: relative;
+        z-index: 1;
+        color: white;
+        padding: 2rem;
+        border-radius: 1rem;
+        background: rgba(17, 24, 39, 0.2);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255,255,255,0.1);
+        transform: translateY(20px);
+    }
+    .hero-content h1 { color: white; text-shadow: 0 4px 12px rgba(0,0,0,0.5); font-size: 3.5rem; margin-bottom:0.5rem;}
+    .hero-content p { font-size: 1.25rem; font-weight: 300; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+</style>
+
+<!-- Global Navbar -->
+<div id="common-navbar"></div>
+
+<!-- Depth Parallax Hero -->
+<div class="hero-depth animate-fade-in">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1>Discover Your Next <span style="color: var(--accent);">Masterpiece</span></h1>
+        <p>Explore the world's most premium real estate listings.</p>
+    </div>
+</div>
+
+<div class="page-wrapper" style="margin-top: 0;">
+
+    <div class="property-grid" id="propertiesGrid">
+        <!-- Loader -->
+        <div style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+            <i class="fas fa-spinner fa-spin fa-2x" style="color: var(--accent);"></i>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Fallback luxury images from our generator
+    const luxuryImages = [
+        '/img/luxury_villa.png',
+        '/img/modern_apartment.png',
+        '/img/commercial_office.png'
+    ];
+
+    async function loadProperties() {
+        try {
+            const response = await fetch('/api/properties');
+            const grid = document.getElementById('propertiesGrid');
+            
+            if (response.ok) {
+                const properties = await response.json();
+                grid.innerHTML = '';
+                
+                if (properties.length === 0) {
+                    grid.innerHTML = '<p style="text-align:center; grid-column:1/-1;">No listings available.</p>';
+                    return;
+                }
+
+                properties.forEach((p, index) => {
+                    // Assign one of the high-end generated images based on type or index
+                    let imgPath = luxuryImages[index % luxuryImages.length];
+                    if (p.sizeSqft < 2000) imgPath = luxuryImages[1]; // apartment
+                    else if (p.price > 1000000) imgPath = luxuryImages[0]; // villa
+                    
+                    // Create beautiful card
+                    const card = document.createElement('div');
+                    card.className = 'property-card animate-fade-in';
+                    card.style.animationDelay = `${index * 0.1}s`;
+                    
+                    card.innerHTML = `
+                        <div class="property-image-wrapper">
+                            <span class="property-badge">${p.status}</span>
+                            <img src="${imgPath}" alt="${p.title}">
+                        </div>
+                        <div class="property-content">
+                            <div class="property-price">$${p.price.toLocaleString()}</div>
+                            <div class="property-title">${p.title}</div>
+                            
+                            <div class="property-meta">
+                                <div class="meta-item">
+                                    <i class="fas fa-vector-square"></i>
+                                    <span>${p.sizeSqft} Sq Ft</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>${p.address?.city || 'Premium Location'}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+        } catch (error) {
+            console.error('Failed to load properties:', error);
+        }
+    }
+
+    // Load after brief timeout to simulate smooth entrance
+    setTimeout(loadProperties, 500);
+
+    // Load common navbar
+    fetch('/navbar.html')
+        .then(res => res.text())
+        .then(html => document.getElementById('common-navbar').innerHTML = html);
+</script>
+
+</body>
+</html>

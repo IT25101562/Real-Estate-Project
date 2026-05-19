@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResellLK | Premium Contact</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #050505;
+            --surface-color: rgba(25, 25, 25, 0.6);
+            --gold: #D4AF37;
+            --gold-hover: #F3E5AB;
+            --text-main: #FFFFFF;
+            --text-muted: #A0A0A0;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Abstract luxury background */
+        .bg-layer {
+            position: fixed;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 40%);
+            z-index: 0;
+            pointer-events: none;
+            animation: slowSpin 60s linear infinite;
+        }
+
+        @keyframes slowSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .container {
+            display: flex;
+            flex: 1;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Left Side: Brand & Hero */
+        .hero-section {
+            flex: 1;
+            padding: 5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-right: 1px solid var(--border-color);
+            background: linear-gradient(135deg, rgba(20,20,20,0.8), rgba(5,5,5,0.9));
+            backdrop-filter: blur(20px);
+        }
+
+        /* Removed duplicate nav-links styles since we use common navbar */
+
+        /* Right Side: Form Container */
+        .form-section {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            background: transparent;
+        }
+
+        .glass-panel {
+            width: 100%;
+            max-width: 500px;
+            background: var(--surface-color);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--border-color);
+            border-radius: 1.5rem;
+            padding: 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s;
+        }
+
+        @keyframes slideUp {
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Toggle Buttons */
+        .type-toggle {
+            display: flex;
+            background: rgba(0,0,0,0.3);
+            border-radius: 99px;
+            padding: 0.35rem;
+            margin-bottom: 2.5rem;
+            position: relative;
+            border: 1px solid var(--border-color);
+        }
+        .type-btn {
+            flex: 1;
+            padding: 0.85rem;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            z-index: 2;
+            transition: var(--transition);
+        }
+        .type-btn.active { color: #000; font-weight: 600; }
+        .toggle-pill {
+            position: absolute;
+            top: 0.35rem;
+            bottom: 0.35rem;
+            width: calc(50% - 0.35rem);
+            background: var(--gold);
+            border-radius: 99px;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 1;
+        }
+        .type-toggle[data-active="booking"] .toggle-pill { transform: translateX(100%); }
+
+        /* Form Fields */
+        .form-view { display: none; opacity: 0; transition: opacity 0.4s ease; }
+        .form-view.active { display: block; opacity: 1; animation: fadeIn 0.4s ease forwards; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        
+        .input-group input, .input-group textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0 0.5rem;
+            font-family: inherit;
+            font-size: 1.1rem;
+            color: var(--text-main);
+            transition: var(--transition);
+        }
+        .input-group input:focus, .input-group textarea:focus { outline: none; border-bottom-color: var(--gold); }
+        
+        /* Floating Labels */
+        .input-group label {
+            position: absolute;
+            left: 0;
+            top: 1rem;
+            font-size: 1rem;
+            color: var(--text-muted);
+            transition: var(--transition);
+            pointer-events: none;
+        }
+        
+        .input-group input:focus ~ label,
+        .input-group input:valid ~ label,
+        .input-group textarea:focus ~ label,
+        .input-group textarea:valid ~ label {
+            top: -0.5rem;
+            font-size: 0.75rem;
+            color: var(--gold);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        input[type="datetime-local"] { color-scheme: dark; }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.25rem;
+            background: var(--gold);
+            color: #000;
+            border: none;
+            border-radius: 0.75rem;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .submit-btn:hover { background: var(--gold-hover); transform: translateY(-2px); box-shadow: 0 10px 20px -10px rgba(212,175,55,0.5); }
+        .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--surface-color);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            border-radius: 99px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: top 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .notification.show { top: 2rem; }
+        .noti-icon { font-size: 1.25rem; }
+        .noti-success .noti-icon { color: #10B981; }
+        .noti-error .noti-icon { color: #EF4444; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .container { flex-direction: column; height: auto; min-height: 100vh; overflow-y: auto; }
+            body, html { overflow-y: auto; }
+            .hero-section { padding: 3rem; border-right: none; border-bottom: 1px solid var(--border-color); }
+            .hero-content h1 { font-size: 3rem; }
+            .form-section { padding: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-layer"></div>
+    <div id="common-navbar"></div>
+    
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle noti-icon"></i>
+        <span id="noti-msg">Request submitted successfully!</span>
+    </div>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="hero-content">
+                <h1 style="font-size: 4.5rem; line-height: 1.1; font-weight: 300; margin: 0 0 1.5rem 0; letter-spacing: -1px;">Step into<br><span style="font-weight: 600; background: linear-gradient(to right, var(--gold), #FFF); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Extraordinary.</span></h1>
+                <p style="font-size: 1.2rem; color: var(--text-muted); font-weight: 300; max-width: 400px; line-height: 1.6;">Connect directly with premium sellers to explore unparalleled properties. Inquire details or reserve a private showing today.</p>
+            </div>
+        </div>
+
+        <!-- Form Section -->
+        <div class="form-section">
+            <div class="glass-panel">
+                
+                <div class="type-toggle" id="typeToggle" data-active="inquiry">
+                    <div class="toggle-pill"></div>
+                    <button class="type-btn active" id="btnInquiry" onclick="switchTab('inquiry')">General Inquiry</button>
+                    <button class="type-btn" id="btnBooking" onclick="switchTab('booking')">Schedule Viewing</button>
+                </div>
+
+                <!-- Inquiry Form -->
+                <form id="form-inquiry" class="form-view active" onsubmit="submitForm(event, 'inquiry')">
+                    <div class="input-group">
+                        <input type="number" id="inq_property" required>
+                        <label>Property ID</label>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="inq_contact" required>
+                        <label>Contact Number</label>
+                    </div>
+                    <div class="input-group" style="margin-bottom: 3rem;">
+                        <textarea id="inq_message" rows="1" required oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"></textarea>
+                        <label>Your Message</label>
+                    </div>
+                    <button type="submit" class="submit-btn" id="btn-submit-inq">
+                        <span>Send Message</span> <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+
+                <!-- Booking Form -->
+                <form id="form-booking" class="form-view" onsubmit="submitForm(event, 'booking')">
+                    <div class="input-group">
+                        <input type="number" id="bk_property" required>
+                        <label>Property ID</label>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="bk_contact" required>
+                        <label>Contact Number</label>
+                    </div>
+                    <div class="input-group" style="margin-bottom: 3rem;">
+                        <!-- Using a standard input with a custom label logic for datetime -->
+                        <input type="datetime-local" id="bk_time" required>
+                        <label style="top:-0.5rem; font-size:0.75rem; color:var(--gold);">Preferred Date & Time</label>
+                    </div>
+                    <button type="submit" class="submit-btn" id="btn-submit-bk">
+                        <span>Request Showing</span> <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const MOCK_BUYER_ID = 1;
+
+        function switchTab(type) {
+            document.getElementById('typeToggle').setAttribute('data-active', type);
+            
+            // Buttons
+            document.getElementById('btnInquiry').classList.toggle('active', type === 'inquiry');
+            document.getElementById('btnBooking').classList.toggle('active', type === 'booking');
+            
+            // Forms
+            document.getElementById('form-inquiry').classList.remove('active');
+            document.getElementById('form-booking').classList.remove('active');
+            
+            setTimeout(() => {
+                document.getElementById('form-' + type).classList.add('active');
+            }, 50); // slight delay to allow display:none to swap
+        }
+
+        function showNotification(msg, isSuccess = true) {
+            const noti = document.getElementById('notification');
+            document.getElementById('noti-msg').textContent = msg;
+            noti.className = 'notification ' + (isSuccess ? 'noti-success' : 'noti-error');
+            
+            // Toggle icon
+            const icon = noti.querySelector('.noti-icon');
+            icon.className = isSuccess ? 'fas fa-check-circle noti-icon' : 'fas fa-exclamation-circle noti-icon';
+
+            noti.classList.add('show');
+            setTimeout(() => noti.classList.remove('show'), 4000);
+        }
+
+        async function submitForm(e, type) {
+            e.preventDefault();
+            const btn = document.getElementById(type === 'inquiry' ? 'btn-submit-inq' : 'btn-submit-bk');
+            const originalText = btn.innerHTML;
+            
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> <span>Processing...</span>';
+
+            let endpoint = '';
+            let payload = {};
+
+            if (type === 'inquiry') {
+                endpoint = '/api/interactions/inquiry';
+                payload = {
+                    type: 'general',
+                    propertyId: parseInt(document.getElementById('inq_property').value),
+                    buyerId: MOCK_BUYER_ID,
+                    contactNumber: document.getElementById('inq_contact').value,
+                    message: document.getElementById('inq_message').value
+                };
+            } else {
+                endpoint = '/api/interactions/booking';
+                const rawTime = document.getElementById('bk_time').value;
+                const scheduledTime = rawTime.length === 16 ? rawTime + ':00' : rawTime;
+                payload = {
+                    type: 'visit',
+                    propertyId: parseInt(document.getElementById('bk_property').value),
+                    buyerId: MOCK_BUYER_ID,
+                    contactNumber: document.getElementById('bk_contact').value,
+                    scheduledTime: scheduledTime
+                };
+            }
+
+            try {
+                const res = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (res.ok) {
+                    showNotification(type === 'inquiry' ? 'Message sent successfully.' : 'Showing requested successfully.');
+                    e.target.reset();
+                    if (type === 'booking') {
+                        setTimeout(() => window.location.href = '/my-bookings.html', 1500);
+                    }
+                } else {
+                    showNotification('Error submitting your request.', false);
+                }
+            } catch (err) {
+                showNotification('Network error occurred.', false);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
+
+        // Load common navbar
+        fetch('/navbar.html')
+            .then(res => res.text())
+            .then(html => document.getElementById('common-navbar').innerHTML = html);
+    </script>
+</body>
+</html>
