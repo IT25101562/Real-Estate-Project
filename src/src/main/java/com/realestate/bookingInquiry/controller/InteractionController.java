@@ -92,6 +92,15 @@ public class InteractionController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /** Respond to an inquiry (Seller Action). */
+    @PutMapping("/inquiry/{id}/reply")
+    public ResponseEntity<?> replyToInquiry(@PathVariable Long id,
+                                            @RequestBody Map<String, String> body) {
+        return inquiryService.replyToInquiry(id, body.get("reply"))
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     /** Reschedule an existing visit request to a new date/time. */
     @PutMapping("/booking/{id}/reschedule")
     public ResponseEntity<?> rescheduleBooking(@PathVariable Long id,
