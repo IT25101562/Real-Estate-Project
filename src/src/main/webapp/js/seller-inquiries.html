@@ -4,203 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ResellLK | Seller Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
             --bg-color: #050505;
-            --surface-color: rgba(25, 25, 25, 0.6);
+            --surface-color: rgba(20, 20, 20, 0.7);
             --gold: #D4AF37;
-            --gold-hover: #F3E5AB;
+            --gold-hover: #FDE047;
             --text-main: #FFFFFF;
             --text-muted: #A0A0A0;
-            --border-color: rgba(255, 255, 255, 0.1);
-            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            --border-color: rgba(212, 175, 55, 0.2);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: 'Outfit', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            min-height: 100vh;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Inter', system-ui, -apple-system, sans-serif; line-height: 1.6; padding-top: 80px; min-height: 100vh; overflow-x: hidden; }
 
-        /* Abstract luxury background */
-        .bg-layer {
-            position: fixed;
-            top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.05) 0%, transparent 60%),
-                        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 40%);
-            z-index: 0;
-            pointer-events: none;
-            animation: slowSpin 60s linear infinite;
-        }
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
 
-        @keyframes slowSpin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        /* Login Portal Overlay */
+        .login-overlay {
+            position: fixed; inset: 0;
+            background: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80') center/cover;
+            z-index: 1000; display: flex; align-items: center; justify-content: center;
+            transition: opacity 0.5s ease, visibility 0.5s;
         }
+        .login-overlay::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); }
+        .login-overlay.hidden { opacity: 0; visibility: hidden; }
 
-        /* Navbar */
-        .navbar {
-            position: relative;
-            z-index: 10;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 5rem;
-            background: rgba(10,10,10,0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color);
+        .login-card {
+            position: relative; background: rgba(15,15,15,0.7); backdrop-filter: blur(25px);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem;
+            padding: 3rem; width: 100%; max-width: 400px; text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5); z-index: 1;
         }
-        .nav-brand {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: white;
-            text-decoration: none;
-            letter-spacing: 2px;
+        .login-card h2 { color: var(--gold); margin-bottom: 2rem; font-weight: 300; font-size: 2rem; }
+        .login-card .input-group { margin-bottom: 1.5rem; text-align: left; }
+        .login-card .input-group label { display: block; font-size: 0.75rem; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; }
+        .login-card .input-group input {
+            width: 100%; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color);
+            padding: 1rem; color: white; font-size: 1.1rem; border-radius: 0.5rem;
         }
-        .nav-brand span { color: var(--gold); }
-        .nav-links { display: flex; gap: 2rem; }
-        .nav-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: var(--transition);
+        .login-card .input-group input:focus { outline: none; border-color: var(--gold); }
+        /* Autofill fix */
+        .login-card .input-group input:-webkit-autofill,
+        .login-card .input-group input:-webkit-autofill:hover,
+        .login-card .input-group input:-webkit-autofill:focus,
+        .login-card .input-group input:-webkit-autofill:active{
+            -webkit-box-shadow: 0 0 0 30px rgba(15,15,15,1) inset !important;
+            -webkit-text-fill-color: white !important;
+            transition: background-color 5000s ease-in-out 0s;
         }
-        .nav-links a:hover { color: var(--gold); }
+        .btn-login { width: 100%; padding: 1rem; border: none; border-radius: 0.5rem; background: var(--gold); color: #000; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: var(--transition); margin-top: 1rem; }
+        .btn-login:hover { background: #FDE047; box-shadow: 0 0 20px rgba(212,175,55,0.4); }
 
-        .page-wrapper {
-            position: relative;
-            z-index: 1;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
-        }
+        .dashboard-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; }
+        .header-actions { display: flex; gap: 1rem; align-items: center; }
+        .btn-header { background: transparent; color: var(--text-muted); border: 1px solid var(--border-color); padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; transition: var(--transition); display: flex; gap: 0.5rem; align-items: center; text-decoration: none; font-size: 0.9rem; }
+        .btn-header:hover { color: white; border-color: white; }
+        .btn-db { color: var(--gold); border-color: var(--border-color); }
+        .btn-db:hover { color: #000; background: var(--gold); border-color: var(--gold); }
 
-        .header-section {
-            margin-bottom: 3rem;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 2rem;
-        }
-        .section-title {
-            font-size: 3rem;
-            font-weight: 300;
-            margin: 0 0 0.5rem 0;
-            letter-spacing: -1px;
-        }
-        .section-subtitle { color: var(--text-muted); font-weight: 300; font-size: 1.1rem; margin: 0; }
+        /* Notification */
+        .notification { position: fixed; top: 100px; right: -400px; background: rgba(0,0,0,0.9); border: 1px solid var(--gold); padding: 1.25rem 2rem; border-radius: 0.75rem; z-index: 1000; transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); display: flex; align-items: center; gap: 1rem; box-shadow: 0 10px 30px rgba(212,175,55,0.15); backdrop-filter: blur(10px); }
+        .notification.show { right: 2rem; }
 
-        /* Stats Row */
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-        .stat-card {
-            background: var(--surface-color);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color);
-            border-radius: 1.25rem;
-            padding: 1.5rem 2rem;
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            transition: var(--transition);
-            animation: slideUp 0.6s ease forwards;
-            opacity: 0;
-        }
-        .stat-card:hover { transform: translateY(-5px); border-color: rgba(212,175,55,0.3); }
-        
-        .stat-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-        }
-        .stat-number { font-size: 2rem; font-weight: 300; color: white; margin-bottom: 0.2rem; }
-        .stat-label  { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
-
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Property Search */
-        .property-search {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            align-items: flex-end;
-            background: rgba(255,255,255,0.02);
-            padding: 1.5rem;
-            border-radius: 1.25rem;
-            border: 1px dashed var(--border-color);
-        }
-        .input-group { position: relative; margin: 0; flex: 1; max-width: 250px; }
-        .input-group input {
-            width: 100%;
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid var(--border-color);
-            padding: 1rem 0 0.5rem;
-            color: white;
-            font-family: inherit;
-            font-size: 1.1rem;
-        }
-        .input-group input:focus { outline: none; border-bottom-color: var(--gold); }
-        .input-group label {
-            position: absolute;
-            left: 0;
-            top: -0.5rem;
-            font-size: 0.75rem;
-            color: var(--gold);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        .btn-search {
-            padding: 0.75rem 2rem;
-            background: var(--gold);
-            color: #000;
-            border: none;
-            border-radius: 0.5rem;
-            font-family: inherit;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        .btn-search:hover { background: var(--gold-hover); transform: translateY(-2px); box-shadow: 0 10px 20px -10px rgba(212,175,55,0.5); }
+        /* Stats */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+        .stat-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 1rem; padding: 1.5rem; display: flex; flex-direction: column; position: relative; overflow: hidden; transition: var(--transition); }
+        .stat-card:hover { background: rgba(255,255,255,0.05); transform: translateY(-5px); border-color: var(--gold); }
+        .stat-icon { position: absolute; right: 1.5rem; top: 1.5rem; font-size: 2rem; opacity: 0.2; color: var(--gold); transition: var(--transition); }
+        .stat-card:hover .stat-icon { transform: scale(1.2); opacity: 0.5; }
+        .stat-value { font-size: 2.5rem; font-weight: 300; color: white; margin-bottom: 0.25rem; }
+        .stat-label { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
         /* Tabs */
-        .panel-tabs {
-            display: flex;
-            gap: 0;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 2rem;
-        }
-        .panel-tab {
-            padding: 1rem 2rem;
-            border: none;
-            background: transparent;
-            color: var(--text-muted);
-            font-family: inherit;
-            font-size: 0.95rem;
-            font-weight: 500;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            margin-bottom: -1px;
-            transition: var(--transition);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .panel-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border-color); margin-bottom: 2rem; }
+        .panel-tab { padding: 1rem 2rem; border: none; background: transparent; color: var(--text-muted); font-family: inherit; font-size: 0.95rem; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: var(--transition); text-transform: uppercase; letter-spacing: 1px; }
         .panel-tab.active { color: var(--gold); border-bottom-color: var(--gold); font-weight: 600; }
         .panel-tab:hover:not(.active) { color: white; }
         .panel-tab i { margin-right: 0.5rem; }
@@ -210,301 +90,318 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         /* Table */
-        .table-wrap {
-            background: var(--surface-color);
-            backdrop-filter: blur(20px);
-            border-radius: 1.25rem;
-            border: 1px solid var(--border-color);
-            overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-        }
+        .table-wrap { background: var(--surface-color); backdrop-filter: blur(20px); border-radius: 1.25rem; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
         .data-table { width: 100%; border-collapse: collapse; }
-        .data-table th {
-            background: rgba(0,0,0,0.3);
-            color: var(--gold);
-            font-weight: 600;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 1.25rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .data-table td {
-            padding: 1.25rem;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            font-size: 0.95rem;
-            vertical-align: middle;
-            color: #E0E0E0;
-        }
+        .data-table th { background: rgba(0,0,0,0.3); color: var(--gold); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 1.25rem; text-align: left; border-bottom: 1px solid var(--border-color); }
+        .data-table td { padding: 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.95rem; vertical-align: middle; color: #E0E0E0; }
         .data-table tr:last-child td { border-bottom: none; }
         .data-table tr:hover td { background: rgba(255,255,255,0.02); }
 
-        .status-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            padding: 0.35rem 0.85rem;
-            border-radius: 99px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .pill-pending   { background: rgba(217, 119, 6, 0.15); color: #FBBF24; border: 1px solid rgba(251, 191, 36, 0.3); }
+        .status-pill { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.85rem; border-radius: 99px; font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+        .pill-pending { background: rgba(217, 119, 6, 0.15); color: #FBBF24; border: 1px solid rgba(251, 191, 36, 0.3); }
         .pill-confirmed { background: rgba(5, 150, 105, 0.15); color: #34D399; border: 1px solid rgba(52, 211, 153, 0.3); }
         .pill-cancelled { background: rgba(220, 38, 38, 0.15); color: #F87171; border: 1px solid rgba(248, 113, 113, 0.3); }
 
-        .action-btn {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 0.5rem;
-            font-family: inherit;
-            font-size: 0.8rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition);
-            margin-right: 0.5rem;
-            background: rgba(255,255,255,0.05);
-            color: white;
-            border: 1px solid var(--border-color);
-        }
-        .action-btn:hover { background: rgba(255,255,255,0.1); }
-        .btn-confirm-a { color: #34D399; }
-        .btn-confirm-a:hover { background: rgba(5, 150, 105, 0.15); border-color: rgba(52, 211, 153, 0.3); }
-        .btn-cancel-a  { color: #F87171; }
-        .btn-cancel-a:hover { background: rgba(220, 38, 38, 0.15); border-color: rgba(248, 113, 113, 0.3); }
+        /* Action Buttons */
+        .action-btn { padding: 0.45rem 0.85rem; border: none; border-radius: 0.5rem; font-family: inherit; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: 0.4rem; background: rgba(255,255,255,0.05); color: white; border: 1px solid var(--border-color); margin-right: 0.25rem; }
+        .action-btn:hover { background: rgba(255,255,255,0.15); }
+        .btn-confirm-a { background: rgba(5,150,105,0.1); color: #34D399; border-color: rgba(5,150,105,0.3); }
+        .btn-confirm-a:hover { background: rgba(5,150,105,0.25); border-color: #34D399; }
+        .btn-cancel-a { background: rgba(220,38,38,0.1); color: #F87171; border-color: rgba(220,38,38,0.3); }
+        .btn-cancel-a:hover { background: rgba(220,38,38,0.25); border-color: #F87171; }
 
-        .empty-row td { text-align: center; padding: 4rem; color: var(--text-muted); font-size: 1.1rem; }
-
+        .empty-row td { text-align: center; padding: 4rem 2rem !important; color: var(--text-muted) !important; font-size: 1.1rem !important; }
         .inline-edit { display: none; margin-top: 0.5rem; }
-        .edit-input {
-            width: 100%;
-            padding: 0.75rem;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid var(--gold);
-            border-radius: 0.5rem;
-            color: white;
-            font-family: inherit;
-            margin-bottom: 0.5rem;
-        }
-
-        /* Notification */
-        .notification {
-            position: fixed;
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--surface-color);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color);
-            padding: 1rem 2rem;
-            border-radius: 99px;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            transition: top 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .notification.show { top: 2rem; }
-        .noti-icon { font-size: 1.25rem; }
-        .noti-success .noti-icon { color: #10B981; }
-
+        .edit-input { width: 100%; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); color: white; padding: 0.5rem; border-radius: 0.25rem; margin-bottom: 0.5rem; font-family: inherit; }
     </style>
 </head>
 <body>
 
-    <div class="bg-layer"></div>
+<!-- Common Navbar -->
+<div id="navbar-placeholder"></div>
 
-    <div class="notification" id="notification">
-        <i class="fas fa-check-circle noti-icon"></i>
-        <span id="noti-msg">Action successful!</span>
-    </div>
-
-    <div id="common-navbar"></div>
-
-    <div class="page-wrapper">
-        <div class="header-section">
-            <h1 class="section-title">Seller Dashboard</h1>
-            <p class="section-subtitle">Manage interactions and viewings for your listed properties.</p>
-        </div>
-
-        <!-- Stats Row -->
-        <div class="stat-grid" id="statsRow">
-            <div class="stat-card" style="animation-delay: 0.1s;">
-                <div class="stat-icon" style="background:rgba(255,255,255,0.05); color:white;"><i class="fas fa-envelope"></i></div>
-                <div><div class="stat-number" id="statInquiries">—</div><div class="stat-label">Inquiries</div></div>
-            </div>
-            <div class="stat-card" style="animation-delay: 0.2s;">
-                <div class="stat-icon" style="background:rgba(217, 119, 6, 0.15); color:#FBBF24;"><i class="fas fa-hourglass-half"></i></div>
-                <div><div class="stat-number" id="statPending">—</div><div class="stat-label">Pending Viewings</div></div>
-            </div>
-            <div class="stat-card" style="animation-delay: 0.3s;">
-                <div class="stat-icon" style="background:rgba(5, 150, 105, 0.15); color:#34D399;"><i class="fas fa-calendar-check"></i></div>
-                <div><div class="stat-number" id="statConfirmed">—</div><div class="stat-label">Confirmed</div></div>
-            </div>
-            <div class="stat-card" style="animation-delay: 0.4s;">
-                <div class="stat-icon" style="background:rgba(220, 38, 38, 0.15); color:#F87171;"><i class="fas fa-times-circle"></i></div>
-                <div><div class="stat-number" id="statCancelled">—</div><div class="stat-label">Cancelled</div></div>
-            </div>
-        </div>
-
-        <!-- Property Search -->
-        <div class="property-search">
+<!-- Seller Login Portal -->
+<div class="login-overlay" id="loginOverlay">
+    <div class="login-card">
+        <h2>Seller Portal</h2>
+        <form id="sellerLoginForm" onsubmit="handleLogin(event)">
             <div class="input-group">
-                <input type="number" id="propertySearch" placeholder="e.g. 1">
-                <label>Filter by Property ID</label>
+                <input type="text" id="sellerUsername" required placeholder=" ">
+                <label>Username</label>
             </div>
-            <button class="btn-search" onclick="loadAll()">
-                <i class="fas fa-search"></i> Load Data
-            </button>
-        </div>
-
-        <!-- Tabs -->
-        <div class="panel-tabs">
-            <button class="panel-tab active" onclick="switchTab('inquiries', this)">
-                <i class="fas fa-envelope-open-text"></i> General Inquiries
-            </button>
-            <button class="panel-tab" onclick="switchTab('bookings', this)">
-                <i class="fas fa-calendar-alt"></i> Viewing Requests
-            </button>
-        </div>
-
-        <!-- General Inquiries Tab -->
-        <div class="tab-panel active" id="tabInquiries">
-            <div class="table-wrap">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Buyer</th>
-                            <th>Contact Info</th>
-                            <th>Message Content</th>
-                            <th>Received Date</th>
-                            <th>Manage</th>
-                        </tr>
-                    </thead>
-                    <tbody id="inquiriesBody">
-                        <tr><td colspan="6" style="text-align:center; padding:3rem;"><i class="fas fa-circle-notch fa-spin fa-2x" style="color:var(--gold);"></i></td></tr>
-                    </tbody>
-                </table>
+            <div class="input-group">
+                <input type="password" id="sellerPassword" required placeholder=" ">
+                <label>Password</label>
             </div>
-        </div>
+            <button type="submit" class="btn-login" id="btnLogin">Secure Login</button>
+            <div id="loginError" style="color: #ef4444; margin-top: 1rem; font-size: 0.9rem; display: none;">Invalid credentials</div>
+        </form>
+    </div>
+</div>
 
-        <!-- Viewing Requests Tab -->
-        <div class="tab-panel" id="tabBookings">
-            <div class="table-wrap">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Buyer</th>
-                            <th>Contact Info</th>
-                            <th>Requested Time</th>
-                            <th>Status</th>
-                            <th>Manage</th>
-                        </tr>
-                    </thead>
-                    <tbody id="bookingsBody">
-                        <tr><td colspan="6" style="text-align:center; padding:3rem;"><i class="fas fa-circle-notch fa-spin fa-2x" style="color:var(--gold);"></i></td></tr>
-                    </tbody>
-                </table>
-            </div>
+<div class="container">
+    <!-- Toast Notification -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle" style="color: var(--gold); margin-right: 0.5rem;"></i>
+        <span id="noti-msg">Action successful</span>
+    </div>
+
+    <div class="dashboard-header">
+        <div>
+            <h1 class="page-title" style="margin-bottom: 0;">Seller Hub <span style="font-weight:300;">Management</span></h1>
+            <p style="color: var(--text-muted); margin-top:0.5rem;">Manage all incoming buyer inquiries and viewings globally across all properties.</p>
+        </div>
+        <div class="header-actions">
+            <a href="/db-viewer.html" class="btn-header btn-db" target="_blank">
+                <i class="fas fa-database"></i> DB Explorer
+            </a>
+            <button class="btn-header" onclick="handleLogout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
         </div>
     </div>
 
-    <script>
-        let currentPropertyId = 1;
+    <!-- Quick Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <i class="fas fa-envelope stat-icon"></i>
+            <div class="stat-value" id="statInquiries">0</div>
+            <div class="stat-label">Total Inquiries</div>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-calendar-check stat-icon"></i>
+            <div class="stat-value" id="statPending">0</div>
+            <div class="stat-label">Pending Viewings</div>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-check-circle stat-icon" style="color: #34D399;"></i>
+            <div class="stat-value" id="statConfirmed">0</div>
+            <div class="stat-label">Confirmed Viewings</div>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-times-circle stat-icon" style="color: #F87171;"></i>
+            <div class="stat-value" id="statCancelled">0</div>
+            <div class="stat-label">Cancelled Viewings</div>
+        </div>
+    </div>
 
-        function showNotification(msg) {
-            const noti = document.getElementById('notification');
-            document.getElementById('noti-msg').textContent = msg;
-            noti.classList.add('show');
-            setTimeout(() => noti.classList.remove('show'), 3000);
+    <!-- Tabs -->
+    <div class="panel-tabs">
+        <button class="panel-tab active" onclick="switchTab('inquiries', this)">
+            <i class="fas fa-envelope-open-text"></i> General Inquiries
+        </button>
+        <button class="panel-tab" onclick="switchTab('bookings', this)">
+            <i class="fas fa-calendar-alt"></i> Viewing Requests
+        </button>
+    </div>
+
+    <!-- General Inquiries Tab -->
+    <div class="tab-panel active" id="tabInquiries">
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Prop ID</th>
+                    <th>Buyer</th>
+                    <th>Contact Info</th>
+                    <th>Message Content</th>
+                    <th>Received Date</th>
+                    <th>Manage</th>
+                </tr>
+                </thead>
+                <tbody id="inquiriesBody">
+                <tr><td colspan="7" style="text-align:center; padding:3rem;"><i class="fas fa-circle-notch fa-spin fa-2x" style="color:var(--gold);"></i></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Viewing Requests Tab -->
+    <div class="tab-panel" id="tabBookings">
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Prop ID</th>
+                    <th>Buyer</th>
+                    <th>Contact Info</th>
+                    <th>Requested Time</th>
+                    <th>Status</th>
+                    <th>Manage</th>
+                </tr>
+                </thead>
+                <tbody id="bookingsBody">
+                <tr><td colspan="7" style="text-align:center; padding:3rem;"><i class="fas fa-circle-notch fa-spin fa-2x" style="color:var(--gold);"></i></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- Authentication Logic ---
+    function checkAuth() {
+        const token = localStorage.getItem('seller_token');
+        if (!token) {
+            document.getElementById('loginOverlay').classList.remove('hidden');
+            return false;
         }
+        document.getElementById('loginOverlay').classList.add('hidden');
+        return true;
+    }
 
-        function switchTab(tab, btn) {
-            document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-            btn.classList.add('active');
-            document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
-        }
+    async function handleLogin(e) {
+        e.preventDefault();
+        const u = document.getElementById('sellerUsername').value;
+        const p = document.getElementById('sellerPassword').value;
+        const btn = document.getElementById('btnLogin');
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        btn.disabled = true;
 
-        async function loadAll() {
-            const val = document.getElementById('propertySearch').value;
-            currentPropertyId = val ? parseInt(val) : 1;
-            await Promise.all([loadInquiries(), loadBookings()]);
-        }
+        try {
+            // Use the DB login endpoint which validates admin/admin123
+            const res = await fetch('/api/db/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: u, password: p })
+            });
 
-        async function loadInquiries() {
-            const res = await fetch(`/api/interactions/inquiry/property/${currentPropertyId}`);
-            const tbody = document.getElementById('inquiriesBody');
-            if (!res.ok) { tbody.innerHTML = '<tr class="empty-row"><td colspan="6"><i class="fas fa-exclamation-triangle" style="margin-bottom:1rem;font-size:2rem;color:var(--border-color);display:block;"></i>Failed to load inquiries.</td></tr>'; return; }
-
-            const inquiries = await res.json();
-            document.getElementById('statInquiries').textContent = inquiries.length;
-
-            tbody.innerHTML = '';
-            if (inquiries.length === 0) {
-                tbody.innerHTML = '<tr class="empty-row"><td colspan="6"><i class="fas fa-inbox" style="margin-bottom:1rem;font-size:2rem;color:var(--border-color);display:block;"></i>No general inquiries found for this property.</td></tr>';
-                return;
+            if (res.ok) {
+                const data = await res.json();
+                localStorage.setItem('seller_token', data.token);
+                document.getElementById('loginOverlay').classList.add('hidden');
+                loadAll();
+            } else {
+                document.getElementById('loginError').style.display = 'block';
             }
+        } catch (err) {
+            document.getElementById('loginError').style.display = 'block';
+        } finally {
+            btn.innerHTML = 'Secure Login';
+            btn.disabled = false;
+        }
+    }
 
-            inquiries.forEach(inq => {
-                const date = inq.createdAt ? new Date(inq.createdAt).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}) : '—';
-                tbody.innerHTML += `
+    function handleLogout() {
+        localStorage.removeItem('seller_token');
+        window.location.reload();
+    }
+
+    // --- Dashboard Logic ---
+    function showNotification(msg) {
+        const noti = document.getElementById('notification');
+        document.getElementById('noti-msg').textContent = msg;
+        noti.classList.add('show');
+        setTimeout(() => noti.classList.remove('show'), 3000);
+    }
+
+    function switchTab(tab, btn) {
+        document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+    }
+
+    async function loadAll() {
+        if (!checkAuth()) return;
+
+        try {
+            // Fetch ALL interactions globally across all properties
+            const res = await fetch('/api/interactions');
+            if (!res.ok) throw new Error('Failed to load interactions');
+            const allInteractions = await res.json();
+
+            // Separate by discriminator type (polymorphism)
+            const inquiries = allInteractions.filter(i => i.type === 'general');
+            const bookings = allInteractions.filter(i => i.type === 'visit');
+
+            renderInquiries(inquiries);
+            renderBookings(bookings);
+        } catch (err) {
+            console.error(err);
+            document.getElementById('inquiriesBody').innerHTML = '<tr class="empty-row"><td colspan="7">Failed to load data.</td></tr>';
+            document.getElementById('bookingsBody').innerHTML = '<tr class="empty-row"><td colspan="7">Failed to load data.</td></tr>';
+        }
+    }
+
+    function renderInquiries(inquiries) {
+        const tbody = document.getElementById('inquiriesBody');
+        document.getElementById('statInquiries').textContent = inquiries.length;
+        tbody.innerHTML = '';
+
+        if (inquiries.length === 0) {
+            tbody.innerHTML = '<tr class="empty-row"><td colspan="7"><i class="fas fa-inbox" style="margin-bottom:1rem;font-size:2rem;color:var(--border-color);display:block;"></i>No general inquiries found.</td></tr>';
+            return;
+        }
+
+        inquiries.forEach(inq => {
+            const date = inq.createdAt ? new Date(inq.createdAt).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}) : '—';
+            const hasReply = inq.sellerReply && inq.sellerReply.trim().length > 0;
+
+            tbody.innerHTML += `
                     <tr id="inq-row-${inq.id}">
                         <td><span style="color:var(--gold);">#${inq.id}</span></td>
+                        <td>Prop #${inq.propertyId}</td>
                         <td>Buyer #${inq.buyerId}</td>
                         <td>${inq.contactNumber || '—'}</td>
-                        <td style="max-width: 300px;">
-                            <span id="inq-msg-${inq.id}">${inq.message || '—'}</span>
+                        <td style="max-width: 350px;">
+                            <div style="margin-bottom: 0.5rem; color: #fff;">${inq.message || '—'}</div>
+
+                            <!-- Display Reply if it exists -->
+                            ${hasReply ? `
+                                <div style="margin-top:0.75rem; padding: 0.75rem; background: rgba(212,175,55,0.05); border-left: 2px solid var(--gold); border-radius: 0.25rem;">
+                                    <strong style="color: var(--gold); font-size: 0.75rem; text-transform: uppercase;">Your Response:</strong><br>
+                                    <span style="color: #ddd; font-size: 0.9rem;">${inq.sellerReply}</span>
+                                </div>
+                            ` : ''}
+
+                            <!-- Inline Reply Form -->
                             <div class="inline-edit" id="inq-edit-${inq.id}">
-                                <input class="edit-input" id="inq-input-${inq.id}" value="${inq.message || ''}">
+                                <textarea class="edit-input" id="inq-input-${inq.id}" rows="3" placeholder="Type your response to the buyer here...">${inq.sellerReply || ''}</textarea>
                                 <div>
-                                    <button class="action-btn btn-confirm-a" onclick="saveInquiry(${inq.id})">Save</button>
+                                    <button class="action-btn btn-confirm-a" onclick="replyInquiry(${inq.id})">Send Reply</button>
                                     <button class="action-btn btn-cancel-a" onclick="cancelEdit('inq', ${inq.id})">Cancel</button>
                                 </div>
                             </div>
                         </td>
                         <td>${date}</td>
                         <td>
-                            <button class="action-btn" onclick="editInquiry(${inq.id})"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="action-btn" onclick="editInquiry(${inq.id})">
+                                <i class="fas fa-reply"></i> ${hasReply ? 'Edit Reply' : 'Respond'}
+                            </button>
                             <button class="action-btn btn-cancel-a" onclick="deleteInquiry(${inq.id})"><i class="fas fa-trash"></i></button>
                         </td>
                     </tr>`;
-            });
+        });
+    }
+
+    function renderBookings(bookings) {
+        const tbody = document.getElementById('bookingsBody');
+        const pending   = bookings.filter(b => b.status === 'PENDING').length;
+        const confirmed = bookings.filter(b => b.status === 'CONFIRMED').length;
+        const cancelled = bookings.filter(b => b.status === 'CANCELLED').length;
+
+        document.getElementById('statPending').textContent   = pending;
+        document.getElementById('statConfirmed').textContent = confirmed;
+        document.getElementById('statCancelled').textContent = cancelled;
+
+        tbody.innerHTML = '';
+        if (bookings.length === 0) {
+            tbody.innerHTML = '<tr class="empty-row"><td colspan="7"><i class="fas fa-calendar-times" style="margin-bottom:1rem;font-size:2rem;color:var(--border-color);display:block;"></i>No viewing requests found.</td></tr>';
+            return;
         }
 
-        async function loadBookings() {
-            const res = await fetch(`/api/interactions/booking/property/${currentPropertyId}`);
-            const tbody = document.getElementById('bookingsBody');
-            if (!res.ok) { tbody.innerHTML = '<tr class="empty-row"><td colspan="6"><i class="fas fa-exclamation-triangle" style="margin-bottom:1rem;font-size:2rem;color:var(--border-color);display:block;"></i>Failed to load viewing requests.</td></tr>'; return; }
+        bookings.forEach(b => {
+            const d = b.scheduledTime ? new Date(b.scheduledTime).toLocaleString('en-US', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'}) : '—';
+            const pillClass = b.status === 'CONFIRMED' ? 'pill-confirmed' : b.status === 'CANCELLED' ? 'pill-cancelled' : 'pill-pending';
+            const icon      = b.status === 'CONFIRMED' ? 'fa-check' : b.status === 'CANCELLED' ? 'fa-times' : 'fa-hourglass-half';
 
-            const bookings = await res.json();
-            const pending   = bookings.filter(b => b.status === 'PENDING').length;
-            const confirmed = bookings.filter(b => b.status === 'CONFIRMED').length;
-            const cancelled = bookings.filter(b => b.status === 'CANCELLED').length;
-            
-            document.getElementById('statPending').textContent   = pending;
-            document.getElementById('statConfirmed').textContent = confirmed;
-            document.getElementById('statCancelled').textContent = cancelled;
-
-            tbody.innerHTML = '';
-            if (bookings.length === 0) {
-                tbody.innerHTML = '<tr class="empty-row"><td colspan="6"><i class="fas fa-calendar-times" style="margin-bottom:1rem;font-size:2rem;color:var(--border-color);display:block;"></i>No viewing requests found for this property.</td></tr>';
-                return;
-            }
-
-            bookings.forEach(b => {
-                const d = b.scheduledTime ? new Date(b.scheduledTime).toLocaleString('en-US', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'}) : '—';
-                const pillClass = b.status === 'CONFIRMED' ? 'pill-confirmed' : b.status === 'CANCELLED' ? 'pill-cancelled' : 'pill-pending';
-                const icon      = b.status === 'CONFIRMED' ? 'fa-check' : b.status === 'CANCELLED' ? 'fa-times' : 'fa-hourglass-half';
-
-                tbody.innerHTML += `
+            tbody.innerHTML += `
                     <tr>
                         <td><span style="color:var(--gold);">#${b.id}</span></td>
+                        <td>Prop #${b.propertyId}</td>
                         <td>Buyer #${b.buyerId}</td>
                         <td>${b.contactNumber || '—'}</td>
                         <td>${d}</td>
@@ -515,56 +412,60 @@
                             ${b.status === 'CANCELLED' ? `<button class="action-btn btn-cancel-a" onclick="deleteBooking(${b.id})"><i class="fas fa-trash"></i> Remove</button>` : ''}
                         </td>
                     </tr>`;
-            });
-        }
+        });
+    }
 
-        // Inquiry edit helpers
-        function editInquiry(id) {
-            document.getElementById(`inq-msg-${id}`).style.display = 'none';
-            document.getElementById(`inq-edit-${id}`).style.display = 'block';
-        }
-        function cancelEdit(type, id) {
-            document.getElementById(`${type}-msg-${id}`).style.display = '';
-            document.getElementById(`${type}-edit-${id}`).style.display = 'none';
-        }
-        async function saveInquiry(id) {
-            const message = document.getElementById(`inq-input-${id}`).value;
-            const res = await fetch(`/api/interactions/inquiry/${id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message })
-            });
-            if (res.ok) { showNotification('Inquiry updated successfully'); await loadInquiries(); }
-        }
-        async function deleteInquiry(id) {
-            if (!confirm('Permanently delete this inquiry?')) return;
-            const res = await fetch(`/api/interactions/inquiry/${id}`, { method: 'DELETE' });
-            if (res.ok) { showNotification('Inquiry deleted'); await loadInquiries(); }
-        }
+    // Inquiry edit helpers
+    function editInquiry(id) {
+        document.getElementById(`inq-edit-${id}`).style.display = 'block';
+    }
+    function cancelEdit(type, id) {
+        document.getElementById(`${type}-edit-${id}`).style.display = 'none';
+    }
+    async function replyInquiry(id) {
+        const reply = document.getElementById(`inq-input-${id}`).value;
+        const res = await fetch(`/api/interactions/inquiry/${id}/reply`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ reply })
+        });
+        if (res.ok) { showNotification('Response saved successfully'); loadAll(); }
+    }
+    async function deleteInquiry(id) {
+        if (!confirm('Permanently delete this inquiry?')) return;
+        const res = await fetch(`/api/interactions/inquiry/${id}`, { method: 'DELETE' });
+        if (res.ok) { showNotification('Inquiry deleted'); loadAll(); }
+    }
 
-        // Booking action helpers
-        async function confirmBooking(id) {
-            const res = await fetch(`/api/interactions/booking/${id}/confirm`, { method: 'PUT' });
-            if (res.ok) { showNotification('Viewing confirmed successfully'); await loadBookings(); }
-        }
-        async function cancelBooking(id) {
-            if (!confirm('Cancel this viewing request?')) return;
-            const res = await fetch(`/api/interactions/booking/${id}/cancel`, { method: 'PUT' });
-            if (res.ok) { showNotification('Viewing cancelled'); await loadBookings(); }
-        }
-        async function deleteBooking(id) {
-            if (!confirm('Remove this booking record?')) return;
-            const res = await fetch(`/api/interactions/booking/${id}`, { method: 'DELETE' });
-            if (res.ok) { showNotification('Record removed'); await loadBookings(); }
-        }
+    // Booking action helpers
+    async function confirmBooking(id) {
+        const res = await fetch(`/api/interactions/booking/${id}/confirm`, { method: 'PUT' });
+        if (res.ok) { showNotification('Viewing confirmed successfully'); loadAll(); }
+    }
+    async function cancelBooking(id) {
+        const res = await fetch(`/api/interactions/booking/${id}/cancel`, { method: 'PUT' });
+        if (res.ok) { showNotification('Viewing cancelled'); loadAll(); }
+    }
+    async function deleteBooking(id) {
+        if (!confirm('Permanently delete this booking record?')) return;
+        const res = await fetch(`/api/interactions/booking/${id}`, { method: 'DELETE' });
+        if (res.ok) { showNotification('Booking deleted'); loadAll(); }
+    }
 
-        // Initial load
-        loadAll();
-
-        // Load common navbar
+    // Initialization
+    document.addEventListener('DOMContentLoaded', () => {
         fetch('/navbar.html')
-            .then(res => res.text())
-            .then(html => document.getElementById('common-navbar').innerHTML = html);
-    </script>
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('navbar-placeholder').innerHTML = html;
+                const links = document.querySelectorAll('.nav-links a');
+                links.forEach(l => { if(l.getAttribute('href')==='/seller-inquiries.html') l.classList.add('active'); });
+            });
+
+        if (checkAuth()) {
+            loadAll();
+        }
+    });
+</script>
 </body>
 </html>

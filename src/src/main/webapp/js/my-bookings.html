@@ -32,7 +32,7 @@
             position: fixed;
             top: -50%; left: -50%; width: 200%; height: 200%;
             background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.05) 0%, transparent 60%),
-                        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 40%);
+            radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 40%);
             z-index: 0;
             pointer-events: none;
             animation: slowSpin 60s linear infinite;
@@ -260,9 +260,9 @@
             transition: transform 0.3s ease;
         }
         .modal-backdrop.open .modal-box { transform: scale(1); }
-        
+
         .modal-box h3 { margin: 0 0 2rem; font-weight: 300; font-size: 1.5rem; }
-        
+
         .input-group { position: relative; margin-bottom: 2.5rem; }
         .input-group input {
             width: 100%;
@@ -302,93 +302,93 @@
     </style>
 </head>
 <body>
-    <div class="bg-layer"></div>
+<div class="bg-layer"></div>
 
-    <div id="common-navbar"></div>
+<div id="common-navbar"></div>
 
-    <div class="page-wrapper">
-        <div class="header-section">
-            <div>
-                <h1 class="section-title">My Schedule</h1>
-                <p class="section-subtitle">Manage your private property viewings</p>
-            </div>
-            <a href="/inquiry-form.html" class="btn-accent">
-                <i class="fas fa-plus"></i> Request Showing
-            </a>
+<div class="page-wrapper">
+    <div class="header-section">
+        <div>
+            <h1 class="section-title">My Schedule</h1>
+            <p class="section-subtitle">Manage your private property viewings</p>
         </div>
-
-        <div class="filter-container">
-            <button class="filter-btn active" onclick="filterStatus('ALL', this)">All Viewings</button>
-            <button class="filter-btn" onclick="filterStatus('PENDING', this)">Pending</button>
-            <button class="filter-btn" onclick="filterStatus('CONFIRMED', this)">Confirmed</button>
-            <button class="filter-btn" onclick="filterStatus('CANCELLED', this)">Cancelled</button>
-        </div>
-
-        <div class="bookings-grid" id="bookingsGrid">
-            <div style="grid-column:1/-1; text-align:center; padding:3rem;">
-                <i class="fas fa-circle-notch fa-spin fa-2x" style="color:var(--gold);"></i>
-            </div>
-        </div>
+        <a href="/inquiry-form.html" class="btn-accent">
+            <i class="fas fa-plus"></i> Request Showing
+        </a>
     </div>
 
-    <!-- Reschedule Modal -->
-    <div class="modal-backdrop" id="rescheduleModal">
-        <div class="modal-box">
-            <h3><i class="fas fa-calendar-alt" style="color:var(--gold); margin-right:10px;"></i> Reschedule Viewing</h3>
-            <div class="input-group">
-                <input type="datetime-local" id="newDateTime">
-                <label>New Date & Time</label>
-            </div>
-            <div style="display:flex; gap:1rem;">
-                <button class="btn-accent" style="flex:1; justify-content:center; padding:1rem;" onclick="saveReschedule()">Confirm</button>
-                <button class="btn-card btn-edit" style="flex:1;" onclick="closeModal()">Cancel</button>
-            </div>
-        </div>
+    <div class="filter-container">
+        <button class="filter-btn active" onclick="filterStatus('ALL', this)">All Viewings</button>
+        <button class="filter-btn" onclick="filterStatus('PENDING', this)">Pending</button>
+        <button class="filter-btn" onclick="filterStatus('CONFIRMED', this)">Confirmed</button>
+        <button class="filter-btn" onclick="filterStatus('CANCELLED', this)">Cancelled</button>
     </div>
 
-    <script>
-        const MOCK_BUYER_ID = 1;
-        let allBookings = [];
-        let rescheduleId = null;
+    <div class="bookings-grid" id="bookingsGrid">
+        <div style="grid-column:1/-1; text-align:center; padding:3rem;">
+            <i class="fas fa-circle-notch fa-spin fa-2x" style="color:var(--gold);"></i>
+        </div>
+    </div>
+</div>
 
-        async function loadBookings() {
-            try {
-                const res = await fetch(`/api/interactions/booking/buyer/${MOCK_BUYER_ID}`);
-                if (res.ok) {
-                    allBookings = await res.json();
-                    renderBookings(allBookings);
-                }
-            } catch (e) { console.error(e); }
-        }
+<!-- Reschedule Modal -->
+<div class="modal-backdrop" id="rescheduleModal">
+    <div class="modal-box">
+        <h3><i class="fas fa-calendar-alt" style="color:var(--gold); margin-right:10px;"></i> Reschedule Viewing</h3>
+        <div class="input-group">
+            <input type="datetime-local" id="newDateTime">
+            <label>New Date & Time</label>
+        </div>
+        <div style="display:flex; gap:1rem;">
+            <button class="btn-accent" style="flex:1; justify-content:center; padding:1rem;" onclick="saveReschedule()">Confirm</button>
+            <button class="btn-card btn-edit" style="flex:1;" onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
+</div>
 
-        function renderBookings(bookings) {
-            const grid = document.getElementById('bookingsGrid');
-            grid.innerHTML = '';
+<script>
+    const MOCK_BUYER_ID = 1;
+    let allBookings = [];
+    let rescheduleId = null;
 
-            if (bookings.length === 0) {
-                grid.innerHTML = `
+    async function loadBookings() {
+        try {
+            const res = await fetch(`/api/interactions/booking/buyer/${MOCK_BUYER_ID}`);
+            if (res.ok) {
+                allBookings = await res.json();
+                renderBookings(allBookings);
+            }
+        } catch (e) { console.error(e); }
+    }
+
+    function renderBookings(bookings) {
+        const grid = document.getElementById('bookingsGrid');
+        grid.innerHTML = '';
+
+        if (bookings.length === 0) {
+            grid.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-calendar-times"></i>
                         <h3 style="font-weight:300; font-size:1.5rem; margin-bottom:1rem;">No Viewings Found</h3>
                         <p style="color:var(--text-muted); margin-bottom:2rem;">You haven't scheduled any property viewings in this category.</p>
                         <a href="/inquiry-form.html" class="btn-accent" style="border-radius:99px;">Explore Properties</a>
                     </div>`;
-                return;
-            }
+            return;
+        }
 
-            bookings.forEach((b, i) => {
-                const d = new Date(b.scheduledTime);
-                const dateStr = d.toLocaleDateString('en-US', { weekday:'short', year:'numeric', month:'short', day:'numeric' });
-                const timeStr = d.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
+        bookings.forEach((b, i) => {
+            const d = new Date(b.scheduledTime);
+            const dateStr = d.toLocaleDateString('en-US', { weekday:'short', year:'numeric', month:'short', day:'numeric' });
+            const timeStr = d.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
 
-                const canCancel = b.status === 'PENDING' || b.status === 'CONFIRMED';
-                const canEdit   = b.status === 'PENDING';
+            const canCancel = b.status === 'PENDING' || b.status === 'CONFIRMED';
+            const canEdit   = b.status === 'PENDING';
 
-                const card = document.createElement('div');
-                card.className = `booking-card ${b.status}`;
-                card.style.animationDelay = `${i * 0.1}s`;
+            const card = document.createElement('div');
+            card.className = `booking-card ${b.status}`;
+            card.style.animationDelay = `${i * 0.1}s`;
 
-                card.innerHTML = `
+            card.innerHTML = `
                     <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                         <span class="status-pill"><i class="fas ${b.status==='CONFIRMED'?'fa-check':b.status==='CANCELLED'?'fa-times':'fa-hourglass-half'}"></i> ${b.status}</span>
                         <span style="color:var(--border-color); font-size:0.8rem;">#${b.id}</span>
@@ -403,57 +403,57 @@
                         ${canCancel ? `<button class="btn-card btn-cancel" onclick="cancelBooking(${b.id})"><i class="fas fa-times"></i> Cancel</button>` : ''}
                         ${!canCancel ? `<button class="btn-card btn-delete" onclick="deleteBooking(${b.id})"><i class="fas fa-trash"></i> Remove Record</button>` : ''}
                     </div>`;
-                grid.appendChild(card);
-            });
-        }
+            grid.appendChild(card);
+        });
+    }
 
-        function filterStatus(status, btn) {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const filtered = status === 'ALL' ? allBookings : allBookings.filter(b => b.status === status);
-            renderBookings(filtered);
-        }
+    function filterStatus(status, btn) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filtered = status === 'ALL' ? allBookings : allBookings.filter(b => b.status === status);
+        renderBookings(filtered);
+    }
 
-        async function cancelBooking(id) {
-            if (!confirm('Are you sure you want to cancel this viewing?')) return;
-            const res = await fetch(`/api/interactions/booking/${id}/cancel`, { method: 'PUT' });
-            if (res.ok) { await loadBookings(); } else { alert(await res.text()); }
-        }
+    async function cancelBooking(id) {
+        if (!confirm('Are you sure you want to cancel this viewing?')) return;
+        const res = await fetch(`/api/interactions/booking/${id}/cancel`, { method: 'PUT' });
+        if (res.ok) { await loadBookings(); } else { alert(await res.text()); }
+    }
 
-        async function deleteBooking(id) {
-            if (!confirm('Permanently remove this booking record?')) return;
-            const res = await fetch(`/api/interactions/booking/${id}`, { method: 'DELETE' });
-            if (res.ok) { await loadBookings(); } else { alert(await res.text()); }
-        }
+    async function deleteBooking(id) {
+        if (!confirm('Permanently remove this booking record?')) return;
+        const res = await fetch(`/api/interactions/booking/${id}`, { method: 'DELETE' });
+        if (res.ok) { await loadBookings(); } else { alert(await res.text()); }
+    }
 
-        function openReschedule(id) {
-            rescheduleId = id;
-            document.getElementById('rescheduleModal').classList.add('open');
-        }
+    function openReschedule(id) {
+        rescheduleId = id;
+        document.getElementById('rescheduleModal').classList.add('open');
+    }
 
-        function closeModal() {
-            rescheduleId = null;
-            document.getElementById('rescheduleModal').classList.remove('open');
-        }
+    function closeModal() {
+        rescheduleId = null;
+        document.getElementById('rescheduleModal').classList.remove('open');
+    }
 
-        async function saveReschedule() {
-            const raw = document.getElementById('newDateTime').value;
-            if (!raw) { alert('Please select a valid date and time.'); return; }
-            const scheduledTime = raw.length === 16 ? raw + ':00' : raw;
-            const res = await fetch(`/api/interactions/booking/${rescheduleId}/reschedule`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ scheduledTime })
-            });
-            if (res.ok) { closeModal(); await loadBookings(); } else { alert(await res.text()); }
-        }
+    async function saveReschedule() {
+        const raw = document.getElementById('newDateTime').value;
+        if (!raw) { alert('Please select a valid date and time.'); return; }
+        const scheduledTime = raw.length === 16 ? raw + ':00' : raw;
+        const res = await fetch(`/api/interactions/booking/${rescheduleId}/reschedule`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ scheduledTime })
+        });
+        if (res.ok) { closeModal(); await loadBookings(); } else { alert(await res.text()); }
+    }
 
-        loadBookings();
+    loadBookings();
 
-        // Load common navbar
-        fetch('/navbar.html')
-            .then(res => res.text())
-            .then(html => document.getElementById('common-navbar').innerHTML = html);
-    </script>
+    // Load common navbar
+    fetch('/navbar.html')
+        .then(res => res.text())
+        .then(html => document.getElementById('common-navbar').innerHTML = html);
+</script>
 </body>
 </html>
