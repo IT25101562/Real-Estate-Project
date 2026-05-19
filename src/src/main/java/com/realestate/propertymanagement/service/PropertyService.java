@@ -1,6 +1,10 @@
+// | PropertyService | CRUD operations | Property |
 package com.realestate.propertymanagement.service;
 
 import com.realestate.propertymanagement.file.PropertyFileHandler;
+import com.realestate.propertymanagement.model.Apartment;
+import com.realestate.propertymanagement.model.House;
+import com.realestate.propertymanagement.model.Land;
 import com.realestate.propertymanagement.model.Property;
 
 import java.util.ArrayList;
@@ -11,8 +15,15 @@ public class PropertyService {
     private PropertyFileHandler fileHandler = new PropertyFileHandler();
 
     public boolean addProperty(Property property) {
+
+        // Validation: stop invalid property before saving
+        if (isInvalidProperty(property)) {
+            return false;
+        }
+
         List<Property> properties = fileHandler.loadProperties();
 
+        // Validation: stop duplicate ID
         for (Property existingProperty : properties) {
             if (existingProperty.getPropertyId().equalsIgnoreCase(property.getPropertyId())) {
                 return false;
@@ -56,6 +67,12 @@ public class PropertyService {
     }
 
     public boolean updateProperty(Property updatedProperty) {
+
+        // Validation: stop invalid update
+        if (isInvalidProperty(updatedProperty)) {
+            return false;
+        }
+
         List<Property> properties = fileHandler.loadProperties();
 
         for (int i = 0; i < properties.size(); i++) {
@@ -127,4 +144,49 @@ public class PropertyService {
         return results;
     }
 
+    // Validation method
+    private boolean isInvalidProperty(Property property) {
+
+        if (property == null) {
+            return true;
+        }
+
+        if (property.getPropertyId() == null || property.getPropertyId().trim().isEmpty()) {
+            return true;
+        }
+
+        if (property.getTitle() == null || property.getTitle().trim().isEmpty()) {
+            return true;
+        }
+
+        if (property.getLocation() == null || property.getLocation().trim().isEmpty()) {
+            return true;
+        }
+
+        if (property.getDescription() == null || property.getDescription().trim().isEmpty()) {
+            return true;
+        }
+
+        if (property.getPrice() <= 0) {
+            return true;
+        }
+
+        if (property instanceof House house) {
+            return house.getBedrooms() < 0 || house.getBathrooms() < 0;
+        }
+
+        if (property instanceof Apartment apartment) {
+            return apartment.getFloorNumber() < 0
+                    || apartment.getUnitNumber() == null
+                    || apartment.getUnitNumber().trim().isEmpty();
+        }
+
+        if (property instanceof Land land) {
+            return land.getLandSize() <= 0
+                    || land.getLandType() == null
+                    || land.getLandType().trim().isEmpty();
+        }
+
+        return false;
+    }
 }

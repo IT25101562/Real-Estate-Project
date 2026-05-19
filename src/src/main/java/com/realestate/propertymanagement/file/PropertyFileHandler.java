@@ -1,3 +1,4 @@
+// | FileHandler | Read/write txt file | PropertyService |
 package com.realestate.propertymanagement.file;
 
 import com.realestate.propertymanagement.model.Apartment;

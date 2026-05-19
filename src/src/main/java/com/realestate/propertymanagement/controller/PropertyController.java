@@ -1,3 +1,4 @@
+// | PropertyController | Connect UI with backend | PropertyService |
 package com.realestate.propertymanagement.controller;
 
 import com.realestate.propertymanagement.model.Apartment;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.MutableAttributeSet;
 import java.util.List;
 
 @Controller
@@ -49,7 +51,10 @@ public class PropertyController {
                                  @RequestParam(required = false, defaultValue = "") String unitNumber,
 
                                  @RequestParam(required = false, defaultValue = "0") double landSize,
-                                 @RequestParam(required = false, defaultValue = "") String landType) {
+                                 @RequestParam(required = false, defaultValue = "") String landType,
+
+                                 Model model
+    ){
 
         Property updatedProperty;
 
@@ -72,7 +77,13 @@ public class PropertyController {
             );
         }
 
-        propertyService.updateProperty(updatedProperty);
+        boolean updated = propertyService.updateProperty(updatedProperty);
+
+        if (!updated) {
+            model.addAttribute("errorMessage", "Invalid property details. Please check your inputs.");
+            model.addAttribute("property", updatedProperty);
+            return "property-edit";
+        }
 
         return "redirect:/properties";
     }
