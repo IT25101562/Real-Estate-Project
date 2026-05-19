@@ -1,4 +1,12 @@
-package com.realestate.search.controller;
+
+        return "search";
+    }
+
+    @PostMapping("/favorites/add")
+    public String addFavorite(@RequestParam String propertyId, @RequestParam String title) {
+        fileStorageService.saveFavorite(propertyId, title);
+        return "redirect:/favorites";
+    }package com.realestate.search.controller;
 
 import com.realestate.search.model.Property;
 import com.realestate.search.model.SearchCriteria;
@@ -11,35 +19,27 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
-public class PropertySearchController {
+    @Controller
+    public class PropertySearchController {
 
-    @Autowired
-    private PropertyService propertyService;
+        @Autowired
+        private PropertyService propertyService;
 
-    @Autowired
-    private FileStorageService fileStorageService;
+        @Autowired
+        private FileStorageService fileStorageService;
 
-    @GetMapping("/")
-    public String showSearchPage(Model model) {
-        model.addAttribute("criteria", new SearchCriteria());
-        model.addAttribute("results", propertyService.search(new SearchCriteria()));
-        return "search";
-    }
+        @GetMapping("/")
+        public String showSearchPage(Model model) {
+            model.addAttribute("criteria", new SearchCriteria());
+            model.addAttribute("results", propertyService.search(new SearchCriteria()));
+            return "search";
+        }
 
-    @PostMapping("/search")
-    public String performSearch(@ModelAttribute SearchCriteria criteria, Model model) {
-        List<Property> results = propertyService.search(criteria);
-        model.addAttribute("criteria", criteria);
-        model.addAttribute("results", results);
-        return "search";
-    }
-
-    @PostMapping("/favorites/add")
-    public String addFavorite(@RequestParam String propertyId, @RequestParam String title) {
-        fileStorageService.saveFavorite(propertyId, title);
-        return "redirect:/favorites";
-    }
+        @PostMapping("/search")
+        public String performSearch(@ModelAttribute SearchCriteria criteria, Model model) {
+            List<Property> results = propertyService.search(criteria);
+            model.addAttribute("criteria", criteria);
+            model.addAttribute("results", results);
 
     @PostMapping("/preferences/save")
     public String savePreference(@ModelAttribute SearchCriteria criteria) {
